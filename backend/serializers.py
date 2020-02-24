@@ -39,7 +39,8 @@ class UserSerilizer(serializers.ModelSerializer):
         fields = (
             'id',
             'username',
-            'email'
+            'email',
+            'tel_no'
         )
 class TripSerializer(serializers.ModelSerializer):
     class Meta:

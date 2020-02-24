@@ -4,13 +4,33 @@ import ReactDOM from 'react-dom';
 import store from '../store'
 import { Provider } from 'react-redux'
 
+import { HashRouter as Router,Route,Switch,Redirect} from 'react-router-dom'
+
+import { loadUser} from '../actions/auth'
+import PrivateRoute from './common/PrivateRoute'
+import All from './Trips/All'
+import Header from './layout/Header'
+import Footer from './layout/Footer'
+import Register from './auth/Register'
+import Login from './auth/Login'
 class App extends React.Component {
+componentDidMount(){
+    store.dispatch(loadUser())
+}
 render() {
    return (
        <Provider store={store}>
-       <main>
-           <h1>manu</h1>
-       </main>
+        <Router>
+            <main>
+                <Header />
+                    <Switch>
+                        <PrivateRoute exact path="/" component={All} />
+                        <Route exact path="/login" component={Login} />
+                        <Route exact path="/register" component={Register} />
+                    </Switch>
+                <Footer />
+            </main>
+       </Router>
        </Provider>
    )
 }

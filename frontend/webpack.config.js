@@ -1,7 +1,6 @@
 var BundleTracker = require('webpack-bundle-tracker')
 module.exports = {
     module: {
-      // plugins :[],
       rules: [
         {
           test: /\.js$/,
