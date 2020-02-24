@@ -1,6 +1,6 @@
 import {LOGIN_SUCCESS,LOGIN_FAIL,USER_LOADED,
     USER_LOADING,AUTH_ERROR,LOGIN_USER,
-    REGISTER_DRIVER,REGISTER_RIDER,
+    REGISTER_SUCCESS,REGISTER_RIDER,
     LOGOUT_SUCCESS } from '../actions/types'
 
 const initialState = {
@@ -12,12 +12,8 @@ const initialState = {
 
 export default function(state=initialState,action){
     switch(action.type){
-        case REGISTER_DRIVER:
-            return{
-                ...state,
-                user:action.payload
-            }
         case LOGIN_SUCCESS:
+        case REGISTER_SUCCESS:
             localStorage.setItem('token',action.payload.token)
             return{
                 ...state,

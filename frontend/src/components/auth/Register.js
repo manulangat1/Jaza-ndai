@@ -1,6 +1,6 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import { registerD } from '../../actions/auth'
+import { Link,Redirect } from 'react-router-dom'
+import { register } from '../../actions/auth'
 import { connect } from 'react-redux'
 class Register extends React.Component {
     constructor(props) {
@@ -16,15 +16,23 @@ class Register extends React.Component {
     onChange = e => {
         this.setState({[e.target.name]:e.target.value})
     }
-    onsubmit = e => {
+    onSubmit = e => {
         e.preventDefault()
-        const {username,email,password,tel_no} = this.state
-        const user = {
-            username,email,password,tel_no
+        const {username,email,password,password2,tel_no} = this.state
+        if (password !== password2  ){
+            alert("Passwords Do not match")
         }
-        this.props.registerD(user)
+        else{
+            const newUser = {
+                username,password,email,tel_no
+            }
+        this.props.register(newUser)
+        }
     }
     render(){
+        if (this.props.isAuthenticated){
+            return <Redirect to="/" />
+        }
         const {username,email,password,password2,tel_no} = this.state
         return(
             <div>
@@ -56,7 +64,7 @@ class Register extends React.Component {
         )
     }
 }
-// const mapStateToProps = state => ({
-//     trips:state.trips.trips
-// })
-export default connect(null,{registerD})(Register)
+const mapStateToProps = state => ({
+    isAuthenticated:state.auth.isAuthenticated
+})
+export default connect(mapStateToProps,{register})(Register)
