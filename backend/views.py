@@ -11,11 +11,18 @@ from knox.models import AuthToken
 # Create your generics here.
 
 class TripView(generics.ListCreateAPIView):
-    permission_classes = [
-        permissions.IsAuthenticated,
-    ]
+    # permission_classes = [
+    #     permissions.IsAuthenticated,
+    # ]
     queryset = Trip.objects.all()
     serializer_class = TripSerializer
+
+    def perform_create(self, serializer):
+        # p = validated_data.pop('kms') * 17 
+        p = self.request.data['kms'] 
+        p1 = int(p) * 4
+        # print(self.request.data['kms'])
+        serializer.save(price=p1,driver=self.request.user)
 class TripDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Trip.objects.all()
     serializer_class = TripSerializer

@@ -44,7 +44,18 @@ class UserSerilizer(serializers.ModelSerializer):
 class TripSerializer(serializers.ModelSerializer):
     class Meta:
         model = Trip
-        fields = '__all__'
+        fields = (
+            'id',
+            'created',
+            'updated',
+            'pick_up_address',
+            'drop_off_address',
+            'status',
+            'driver',
+            'rider',
+            'kms',
+            'price'
+        )
         read_only_fields = ('id','created','updated',)
 class ReadOnlyTripSerializer(serializers.ModelSerializer):
     driver = UserSerilizer(read_only=True)

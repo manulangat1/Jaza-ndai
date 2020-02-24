@@ -4,9 +4,21 @@ from django.shortcuts import reverse
 from django.conf import settings
 # Create your models here.
 class User(AbstractUser):
-    pass
-
-
+    tel_no = models.CharField(max_length=18,default=0)
+    is_driver = models.BooleanField(default=False)
+    is_rider = models.BooleanField(default=False)
+    # def __str__(self):
+    #     return self.tel_no
+class Driver(models.Model):
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return "{} = {}".format(self.user.username,self.user.tel_no)
+class Rider(models.Model):
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return "{} = {}".format(self.user.username,self.user.tel_no)
 class Trip(models.Model):
     REQUESTED = 'REQUESTED'
     STARTED = 'STARTED'
@@ -38,13 +50,11 @@ class Trip(models.Model):
         on_delete=models.DO_NOTHING,
         related_name='trips_as_rider'
     )
-    kms = models.PositiveIntegerField()
-    price = models.PositiveIntegerField()
+    kms = models.PositiveIntegerField(default=0)
+    price = models.PositiveIntegerField(default=0)
     def get_price(self):
         p = self.kms * 58
         self.price = p 
         self.price.save()
     def __str__(self):
         return self.status
-    # def get_absolute_url(self):
-    #     return  reverse ('trip:trip_detail', kwargs={'trip_id': self.id})
