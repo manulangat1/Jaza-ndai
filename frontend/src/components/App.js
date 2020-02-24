@@ -13,6 +13,7 @@ import Header from './layout/Header'
 import Footer from './layout/Footer'
 import Register from './auth/Register'
 import Login from './auth/Login'
+// import Maps from './Maps'
 class App extends React.Component {
 componentDidMount(){
     store.dispatch(loadUser())
@@ -27,6 +28,7 @@ render() {
                         <PrivateRoute exact path="/" component={All} />
                         <Route exact path="/login" component={Login} />
                         <Route exact path="/register" component={Register} />
+                        {/* <Route exact path="/maps" component={Maps} /> */}
                     </Switch>
                 <Footer />
             </main>
