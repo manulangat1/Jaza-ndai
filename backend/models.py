@@ -38,6 +38,12 @@ class Trip(models.Model):
         on_delete=models.DO_NOTHING,
         related_name='trips_as_rider'
     )
+    kms = models.PositiveIntegerField()
+    price = models.PositiveIntegerField()
+    def get_price(self):
+        p = self.kms * 58
+        self.price = p 
+        self.price.save()
     def __str__(self):
         return self.status
     # def get_absolute_url(self):

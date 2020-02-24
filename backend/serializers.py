@@ -41,8 +41,6 @@ class UserSerilizer(serializers.ModelSerializer):
             'username',
             'email'
         )
-
-
 class TripSerializer(serializers.ModelSerializer):
     class Meta:
         model = Trip

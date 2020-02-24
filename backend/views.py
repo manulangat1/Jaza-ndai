@@ -10,10 +10,13 @@ from rest_framework.response import Response
 from knox.models import AuthToken
 # Create your generics here.
 
-class TripView(generics.ListAPIView):
+class TripView(generics.ListCreateAPIView):
+    permission_classes = [
+        permissions.IsAuthenticated,
+    ]
     queryset = Trip.objects.all()
     serializer_class = TripSerializer
-class TripDetailView(generics.RetrieveAPIView):
+class TripDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Trip.objects.all()
     serializer_class = TripSerializer
 
