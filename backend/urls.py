@@ -3,6 +3,7 @@ from . import views
 from knox import views as knox_views
 urlpatterns = [
     path('api/auth',include('knox.urls')),
+    path('map/',views.maps),
     path('trip/',views.TripView.as_view()),
     path('trip/<pk>/',views.TripDetailView.as_view()),
     path('trips/<pk>/',views.JoinTripView.as_view()),

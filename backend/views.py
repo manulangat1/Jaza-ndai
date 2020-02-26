@@ -1,6 +1,5 @@
 from django.shortcuts import render
 
-
 from .serializers import TripSerializer,LoginSerializer,UserSerilizer,RegisterSerilizer
 from .models import Trip,User
 from rest_framework import viewsets
@@ -18,7 +17,6 @@ class TripView(generics.ListCreateAPIView):
     serializer_class = TripSerializer
 
     def perform_create(self, serializer):
-        # p = validated_data.pop('kms') * 17 
         p = self.request.data['kms'] 
         p1 = int(p) * 4
         # print(self.request.data['kms'])
@@ -36,12 +34,18 @@ class JoinTripView(generics.RetrieveUpdateAPIView):
     queryset = Trip.objects.all()
     serializer_class = TripSerializer
     def update(self, request, *args, **kwargs):
+        # print(request.data)
         instance = self.get_object()
-        instance.rider = self.request.user
+        if instance.rider == self.request.user:
+            print(instance.rider.count())
+            return Response({"Already signed up"})
         if self.request.user == instance.driver:
-            print(instance.riders)
+            print(instance.rider)
             return Response({"updated successfully"})
-        instance.save()
+        if instance.rider.count() == instance.capacity:
+            return Response("Car is already full")
+        instance.rider.add(self.request.user)
+        print(instance.rider.count())
         return Response({"updated successfully"})
 class RegisterAPI(generics.GenericAPIView):
     serializer_class = RegisterSerilizer
@@ -72,3 +76,14 @@ class UserAPI(generics.RetrieveAPIView):
     serializer_class = UserSerilizer
     def get_object(self):
         return self.request.user
+
+from opencage.geocoder import OpenCageGeocode
+from pprint import pprint
+from django.http import HttpResponse
+key = "ff7815864d3c4b8f878f64122c64894b"
+def maps(request):
+    geocoder = OpenCageGeocode(key)	
+    query = 'Nyagacho,kericho, Kenya'  	
+    results = geocoder.geocode(query)
+    print (results)
+    return HttpResponse({"Got is"})

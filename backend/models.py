@@ -44,11 +44,18 @@ class Trip(models.Model):
         on_delete=models.DO_NOTHING,
         related_name='trips_as_driver'
         )
-    rider = models.ForeignKey( # new
+    # rider = models.ForeignKey( # new
+    #     settings.AUTH_USER_MODEL,
+    #     null=True,
+    #     blank=True,
+    #     on_delete=models.DO_NOTHING,
+    #     related_name='trips_as_rider'
+    # )
+    rider = models.ManyToManyField( # new
         settings.AUTH_USER_MODEL,
         null=True,
         blank=True,
-        on_delete=models.DO_NOTHING,
+        # on_delete=models.DO_NOTHING,
         related_name='trips_as_rider'
     )
     kms = models.PositiveIntegerField(default=0)
