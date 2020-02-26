@@ -14,7 +14,7 @@ class All extends React.Component {
                     this.props.trips.map(trip => 
                         <div key={trip.id}>
                             <Link to={`trip/${trip.id}`}> <h1>{trip.id}</h1></Link>
-                            <p>{trip.driver}</p>
+                            {/* <p>{trip.driver}</p> */}
                         </div>
                         )
                 }

@@ -5,6 +5,7 @@ urlpatterns = [
     path('api/auth',include('knox.urls')),
     path('trip/',views.TripView.as_view()),
     path('trip/<pk>/',views.TripDetailView.as_view()),
+    path('trips/<pk>/',views.JoinTripView.as_view()),
     path('register/',views.RegisterAPI.as_view()),
     path('login/',views.LoginAPI.as_view()),
     path('user/',views.UserAPI.as_view()),

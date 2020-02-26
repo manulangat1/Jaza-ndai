@@ -31,6 +31,7 @@ class Trip(models.Model):
         (COMPLETED, COMPLETED),
     )
     created = models.DateTimeField(auto_now_add=True)
+    capacity = models.IntegerField(default=0)
     updated = models.DateTimeField(auto_now=True)
     pick_up_address = models.CharField(max_length=255)
     drop_off_address = models.CharField(max_length=255)

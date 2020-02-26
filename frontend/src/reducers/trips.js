@@ -1,8 +1,9 @@
-import { GET_ALL_TRIPS,ADD_TRIP,TRIP_DETAILS,UPDATE_TRIP } from '../actions/types'
+import { GET_ALL_TRIPS,ADD_TRIP,TRIP_DETAILS,UPDATE_TRIP,JOIN_TRIP } from '../actions/types'
 
 const initialState = {
     trips:[],
-    trip:[]
+    trip:[],
+    tripData:[]
 }
 export default function(state=initialState,action){
     switch(action.type){
@@ -20,6 +21,11 @@ export default function(state=initialState,action){
             return {
                 ...state,
                 trip:action.payload
+            }
+        case JOIN_TRIP:
+            return{
+                ...state,
+                tripData:action.payload
             }
         default:
             return state

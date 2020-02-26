@@ -30,8 +30,8 @@ render() {
                         <PrivateRoute exact path="/" component={All} />
                         <Route exact path="/login" component={Login} />
                         <Route exact path="/register" component={Register} />
-                        <Route exact path="/add" component={AddTrip} />
-                        <Route exact path="/trip/:id" component={TripDetails} />
+                        <PrivateRoute exact path="/add" component={AddTrip} />
+                        <PrivateRoute exact path="/trip/:id" component={TripDetails} />
                     </Switch>
                 <Footer />
             </main>

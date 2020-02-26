@@ -29,7 +29,17 @@ class TripDetailView(generics.RetrieveUpdateDestroyAPIView):
     ]
     queryset = Trip.objects.all()
     serializer_class = TripSerializer
-
+class JoinTripView(generics.RetrieveUpdateAPIView):
+    permission_classes = [
+        permissions.IsAuthenticated,
+    ]
+    queryset = Trip.objects.all()
+    serializer_class = TripSerializer
+    def perform_update(self, serializer):
+        # if self.request.user == self.driver:
+        # driver = serializer['driver']
+        # print(driver)
+        serializer.save(rider=self.request.user)
 class RegisterAPI(generics.GenericAPIView):
     serializer_class = RegisterSerilizer
 
