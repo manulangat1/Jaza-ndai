@@ -24,6 +24,9 @@ class TripView(generics.ListCreateAPIView):
         # print(self.request.data['kms'])
         serializer.save(price=p1,driver=self.request.user)
 class TripDetailView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [
+        permissions.IsAuthenticated,
+    ]
     queryset = Trip.objects.all()
     serializer_class = TripSerializer
 

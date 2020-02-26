@@ -13,6 +13,8 @@ import Header from './layout/Header'
 import Footer from './layout/Footer'
 import Register from './auth/Register'
 import Login from './auth/Login'
+import AddTrip from './Trips/AddTrip'
+import TripDetails from './Trips/TripDetails'
 // import Maps from './Maps'
 class App extends React.Component {
 componentDidMount(){
@@ -28,7 +30,8 @@ render() {
                         <PrivateRoute exact path="/" component={All} />
                         <Route exact path="/login" component={Login} />
                         <Route exact path="/register" component={Register} />
-                        {/* <Route exact path="/maps" component={Maps} /> */}
+                        <Route exact path="/add" component={AddTrip} />
+                        <Route exact path="/trip/:id" component={TripDetails} />
                     </Switch>
                 <Footer />
             </main>
