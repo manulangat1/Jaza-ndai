@@ -21,6 +21,7 @@ class TripDetails extends React.Component {
                 <p>{trip && trip.pick_up_address}</p>
                 <p>{trip.driver}</p>
                 <p>{trip.rider}</p>
+                <p>{trip.capacity }</p>
                 <button onClick={this.onClick}>Join as a rider</button>
             </section>
         )

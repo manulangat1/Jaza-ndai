@@ -55,7 +55,8 @@ class TripSerializer(serializers.ModelSerializer):
             'driver',
             'rider',
             'kms',
-            'price'
+            'price',
+            'capacity'
         )
         read_only_fields = ('id','created','updated',)
 class ReadOnlyTripSerializer(serializers.ModelSerializer):

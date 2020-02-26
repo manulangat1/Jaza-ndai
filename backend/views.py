@@ -35,11 +35,14 @@ class JoinTripView(generics.RetrieveUpdateAPIView):
     ]
     queryset = Trip.objects.all()
     serializer_class = TripSerializer
-    def perform_update(self, serializer):
-        # if self.request.user == self.driver:
-        # driver = serializer['driver']
-        # print(driver)
-        serializer.save(rider=self.request.user)
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.rider = self.request.user
+        if self.request.user == instance.driver:
+            print(instance.riders)
+            return Response({"updated successfully"})
+        instance.save()
+        return Response({"updated successfully"})
 class RegisterAPI(generics.GenericAPIView):
     serializer_class = RegisterSerilizer
 
