@@ -14,8 +14,8 @@ export const getTrips = () => (dispatch,getState) => (
              err => console.log(err)
          )
 )
-export const AddTrips = ({pick_up_address,drop_off_address,status,kms}) => (dispatch,getState) => {
-    const body = JSON.stringify({pick_up_address,drop_off_address,status,kms})
+export const AddTrips = ({pick_up_address,drop_off_address,status,capacity}) => (dispatch,getState) => {
+    const body = JSON.stringify({pick_up_address,drop_off_address,status,capacity})
     console.log(body)
     axios
         .post('/api/trip/',body,tokenConfig(getState))

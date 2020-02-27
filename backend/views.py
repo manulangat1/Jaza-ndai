@@ -1,5 +1,6 @@
 from django.shortcuts import render
-
+from django.contrib.gis.measure import D
+from django.contrib.gis.geos import Point 
 from .serializers import TripSerializer,LoginSerializer,UserSerilizer,RegisterSerilizer
 from .models import Trip,User
 from rest_framework import viewsets
@@ -7,20 +8,63 @@ from rest_framework import generics,permissions
 from rest_framework.response import Response
 
 from knox.models import AuthToken
-# Create your generics here.
 
+from opencage.geocoder import OpenCageGeocode
+from pprint import pprint
+from django.http import HttpResponse
+key = "fbef4f421fde4fbfbb85ba15cc7ad502"
+# Create your generics here.
+def find_geo(q):
+    geocoder = OpenCageGeocode(key)	
+    query = f'{q}, Kenya'  	
+    print(query)
+    results = geocoder.geocode(query)
+    print (results)
+    lat = results[0]['geometry']['lat']
+    lng = results[0]['geometry']['lng']
+    print (lat, lng)
 class TripView(generics.ListCreateAPIView):
     permission_classes = [
         permissions.IsAuthenticated,
     ]
     queryset = Trip.objects.all()
+    # queryset = Trip.objects.filter(geo_location__distance_lte=(geo_location, D(km=10)))
     serializer_class = TripSerializer
-
+    
     def perform_create(self, serializer):
-        p = self.request.data['kms'] 
-        p1 = int(p) * 4
-        # print(self.request.data['kms'])
-        serializer.save(price=p1,driver=self.request.user)
+        q = self.request.data['pick_up_address']
+        z = self.request.data['drop_off_address']
+        # find_geo(q)
+        geocoder = OpenCageGeocode(key)	
+        query = f'{q}, Kenya'  	
+        print(query)
+        results = geocoder.geocode(query)
+        print (results)
+        lat = results[0]['geometry']['lat']
+        lng = results[0]['geometry']['lng']
+        print (lat, lng)
+        location_point = Point(lng, lat)
+        print(location_point)
+        ######################
+        query = f'{z}, Kenya'  	
+        print(query)
+        results = geocoder.geocode(query)
+        print (results)
+        lat = results[0]['geometry']['lat']
+        lng = results[0]['geometry']['lng']
+        print (lat, lng)
+        drop_point = Point(lng, lat)
+        print(drop_point)
+        distance = location_point.distance(drop_point)
+        distance_in_km = distance * 100
+        print(distance_in_km)
+        p1 = int(distance_in_km) * 4 
+        serializer.save(kms=distance_in_km,
+            price=p1,driver=self.request.user,
+            geo_location=location_point,
+            to_point=drop_point
+        )
+    # print (list_lat, list_long)
 class TripDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [
         permissions.IsAuthenticated,
@@ -77,13 +121,18 @@ class UserAPI(generics.RetrieveAPIView):
     def get_object(self):
         return self.request.user
 
-from opencage.geocoder import OpenCageGeocode
-from pprint import pprint
-from django.http import HttpResponse
-key = "ff7815864d3c4b8f878f64122c64894b"
+
 def maps(request):
-    geocoder = OpenCageGeocode(key)	
-    query = 'Nyagacho,kericho, Kenya'  	
-    results = geocoder.geocode(query)
-    print (results)
+    trips = []
+    for trip in Trip.objects.all():
+        trips.append(trip.pick_up_address)
+    print(trips)
+    for trip in trips:
+        geocoder = OpenCageGeocode(key)	
+        query = f'{trip},Kenya'
+        print(query)  	
+        results = geocoder.geocode(query)
+        lat = results[0]['geometry']['lat']
+        lng = results[0]['geometry']['lng']
+        print (lat, lng)
     return HttpResponse({"Got is"})

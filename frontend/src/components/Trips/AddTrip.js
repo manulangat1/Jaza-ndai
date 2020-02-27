@@ -7,21 +7,21 @@ class AddTrip extends React.Component{
         pick_up_address:'',
         drop_off_address:'',
         status:'',
-        kms:100
+        capacity:''
     }
     onChange = e => this.setState({[e.target.name]:e.target.value})
     onSubmit = e => {
         e.preventDefault()
-        const {pick_up_address,drop_off_address,status,kms} = this.state
+        const {pick_up_address,drop_off_address,status,capacity} = this.state
         const newTrip ={
-            pick_up_address,drop_off_address,status,kms
+            pick_up_address,drop_off_address,status,capacity
         }
         this.props.AddTrips(newTrip)
         console.log('submitted')
         this.props.history.push('/')
     }
     render(){
-        const {pick_up_address,drop_off_address,status,kms} = this.state
+        const {pick_up_address,drop_off_address,status,capacity} = this.state
         return (
             <section>
                 <form onSubmit={this.onSubmit}>
@@ -36,6 +36,10 @@ class AddTrip extends React.Component{
                     <div>
                         <label>status</label>
                         <input type="text" value={status} onChange={this.onChange} name="status"  />
+                    </div>
+                    <div>
+                        <label>Capacity</label>
+                        <input type="number" value={capacity} onChange={this.onChange} name="capacity"  />
                     </div>
                     <button> Add Trips </button>
                     {/* <Link to="/register">Register</Link> */}

@@ -1,4 +1,6 @@
-from django.db import models
+# from django.db import models
+from django.db.models import Manager as GeoManager
+from django.contrib.gis.db import models
 from django.contrib.auth.models import AbstractUser
 from django.shortcuts import reverse
 from django.conf import settings
@@ -53,11 +55,13 @@ class Trip(models.Model):
     # )
     rider = models.ManyToManyField( # new
         settings.AUTH_USER_MODEL,
-        null=True,
         blank=True,
         # on_delete=models.DO_NOTHING,
         related_name='trips_as_rider'
     )
+    geo_location = models.PointField(srid=4326,null=True,blank=True)
+    to_point = models.PointField(srid=4326,null=True,blank=True)
+    # geo_objects = GeoManager()
     kms = models.PositiveIntegerField(default=0)
     price = models.PositiveIntegerField(default=0)
     def get_price(self):

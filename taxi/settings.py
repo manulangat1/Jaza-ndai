@@ -30,7 +30,8 @@ INSTALLED_APPS = [
     'frontend.apps.FrontendConfig',
     'rest_framework',
     'knox',
-    'channels'
+    'channels',
+    'django.contrib.gis',
 ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ( 'knox.auth.TokenAuthentication',)
@@ -72,8 +73,10 @@ WSGI_APPLICATION = 'taxi.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'django_geo',
+        'USER': 'manulangat',
+        'PASSWORD': '3050manu'
     }
 }
 
