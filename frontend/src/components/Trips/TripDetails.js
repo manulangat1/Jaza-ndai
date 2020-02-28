@@ -2,6 +2,7 @@ import React from 'react'
 import { tripDetails } from '../../actions/trips'
 import { joinTrip } from '../../actions/join'
 import { connect } from 'react-redux'
+import '../styles/main.scss'
 class TripDetails extends React.Component {
     componentDidMount(){
         if (this.props.id){
@@ -16,13 +17,15 @@ class TripDetails extends React.Component {
     render(){
         const { trip } = this.props
         return(
-            <section>
+            <section id="tripd">
+                <div className="container">
                 <h1>h</h1>
                 <p>{trip && trip.pick_up_address}</p>
                 <p>{trip.driver}</p>
                 <p>{trip.rider}</p>
                 <p>{trip.capacity }</p>
                 <button onClick={this.onClick}>Join as a rider</button>
+                </div>
             </section>
         )
     }

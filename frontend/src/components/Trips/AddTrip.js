@@ -26,7 +26,8 @@ class AddTrip extends React.Component{
         }
         const {pick_up_address,drop_off_address,status,capacity} = this.state
         return (
-            <section>
+            <section id="add">
+                <div className="container">
                 <form onSubmit={this.onSubmit}>
                     <div>
                         <label>From</label>
@@ -47,6 +48,7 @@ class AddTrip extends React.Component{
                     <button> Add Trips </button>
                     {/* <Link to="/register">Register</Link> */}
                 </form>
+                </div>
             </section>
         )
     }

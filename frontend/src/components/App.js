@@ -28,14 +28,16 @@ render() {
             {/* <main className="map"> */}
                 <Header />
                     <Switch>
+                        <section id="app">
                         <PrivateRoute exact path="/" component={All} />
                         <Route exact path="/login" component={Login} />
                         <Route exact path="/register" component={Register} />
                         <PrivateRoute exact path="/add" component={AddTrip} />
                         <PrivateRoute exact path="/trip/:id" component={TripDetails} />
-                        <div className="map">
+                        {/* <div className="map"> */}
                             <PrivateRoute  exact path="/maps" component={Maps} />
-                        </div>
+                        {/* </div> */}
+                        </section>
                     </Switch>
                 <Footer />
             {/* </main> */}

@@ -27,8 +27,8 @@ class Header extends React.Component {
         )
         const authLinks = (
             <ul>
-                    {/* <span>{ user ? `Welcome ${user.username }`: ""}</span>
-                    <span>{ user && user.is_driver ? `Welcome ${user.username }`: "hey"}</span> */}
+                    <span className="name">{ user ? `Welcome ${user.username }`: ""}</span>
+                    {/* <span>{ user && user.is_driver ? `Welcome ${user.username }`: "hey"}</span> */}
                     { user && user.is_driver ? driverLinks : riderLinks}   
                 </ul>
         )
@@ -40,7 +40,9 @@ class Header extends React.Component {
         )
         return(
             <header>
-                { isAuthenticated ? authLinks : guestLinks}       
+                <div className="container">
+                { isAuthenticated ? authLinks : guestLinks}   
+                </div>    
             </header>
         )
     }
