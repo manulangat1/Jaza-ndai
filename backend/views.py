@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.contrib.gis.measure import D
+from django.contrib.gis.measure import Distance  
+from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.gis.geos import Point 
-from .serializers import TripSerializer,LoginSerializer,UserSerilizer,RegisterSerilizer
+from .serializers import TripSerializer,LoginSerializer,UserSerilizer,RegisterSerilizer,ReadOnlyTripSerializer
 from .models import Trip,User
 from rest_framework import viewsets
 from rest_framework import generics,permissions
@@ -27,45 +29,58 @@ class TripView(generics.ListCreateAPIView):
     permission_classes = [
         permissions.IsAuthenticated,
     ]
-    queryset = Trip.objects.all()
-    # queryset = Trip.objects.filter(geo_location__distance_lte=(geo_location, D(km=10)))
     serializer_class = TripSerializer
-    
+    def get_queryset(self):
+        lat = 1.2921
+        lng = 36.8219
+        radius = 10
+        point = Point(lng, lat)  
+        # return super().get_queryset()
+        print(self.request.user)
+        user = User.objects.filter(username=self.request.user).first()
+        # print(user.geo_location)
+        if user.is_rider == True:
+            print("rider")
+        return Trip.objects.filter(geo_location__distance_lte=(point, D(km=200)))
     def perform_create(self, serializer):
-        q = self.request.data['pick_up_address']
-        z = self.request.data['drop_off_address']
-        # find_geo(q)
-        geocoder = OpenCageGeocode(key)	
-        query = f'{q}, Kenya'  	
-        print(query)
-        results = geocoder.geocode(query)
-        print (results)
-        lat = results[0]['geometry']['lat']
-        lng = results[0]['geometry']['lng']
-        print (lat, lng)
-        location_point = Point(lng, lat)
-        print(location_point)
-        ######################
-        query = f'{z}, Kenya'  	
-        print(query)
-        results = geocoder.geocode(query)
-        print (results)
-        lat = float(results[0]['geometry']['lat'])
-        lng = float(results[0]['geometry']['lng'])
-        print (lat, lng)
-        drop_point = Point(lng, lat)
-        print(drop_point)
-        distance = location_point.distance(drop_point)
-        distance_in_km = distance * 100
-        print(distance_in_km)
-        p1 = int(distance_in_km) * 4 
-        serializer.save(kms=distance_in_km,
-            price=p1,driver=self.request.user,
-            geo_location=location_point,
-            geo_location_lat=lat,
-            geo_location_long=lng,
-            to_point=drop_point
-        )
+        user = User.objects.filter(username=self.request.user).first()
+        if user.is_driver == True:
+            q = self.request.data['pick_up_address']
+            z = self.request.data['drop_off_address']
+            # find_geo(q)
+            geocoder = OpenCageGeocode(key)	
+            query = f'{q}, Kenya'  	
+            print(query)
+            results = geocoder.geocode(query)
+            print (results)
+            lat = results[0]['geometry']['lat']
+            lng = results[0]['geometry']['lng']
+            print (lat, lng)
+            location_point = Point(lng, lat)
+            print(location_point)
+            ######################
+            query = f'{z}, Kenya'  	
+            print(query)
+            results = geocoder.geocode(query)
+            print (results)
+            lat = float(results[0]['geometry']['lat'])
+            lng = float(results[0]['geometry']['lng'])
+            print (lat, lng)
+            drop_point = Point(lng, lat)
+            print(drop_point)
+            distance = location_point.distance(drop_point)
+            distance_in_km = distance * 100
+            print(distance_in_km)
+            p1 = int(distance_in_km) * 4 
+            serializer.save(kms=distance_in_km,
+                price=p1,driver=self.request.user,
+                geo_location=location_point,
+                geo_location_lat=lat,
+                geo_location_long=lng,
+                to_point=drop_point
+            )
+        else:
+            return Response({"You dont have permissions to add"})
     # print (list_lat, list_long)
 class TripDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [
@@ -139,3 +154,19 @@ def maps(request):
         lng = results[0]['geometry']['lng']
         # print (lat, lng)
     return HttpResponse({"Got is"})
+class GetAllTrips(generics.ListAPIView):
+    serializer_class = ReadOnlyTripSerializer
+    permissions_classes = [
+        permissions.IsAuthenticated
+    ]
+    def get_queryset(self):
+        user = User.objects.filter(username=self.request.user).first()
+        return Trip.objects.filter(driver=user).all()
+class GetAllRider(generics.ListAPIView):
+    serializer_class = ReadOnlyTripSerializer
+    permissions_classes = [
+        permissions.IsAuthenticated
+    ]
+    def get_queryset(self):
+        user = User.objects.filter(username=self.request.user).first()
+        return Trip.objects.filter(rider=user).all()

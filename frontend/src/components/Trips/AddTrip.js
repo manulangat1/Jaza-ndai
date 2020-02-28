@@ -21,6 +21,9 @@ class AddTrip extends React.Component{
         this.props.history.push('/')
     }
     render(){
+        if (this.props.auth.user.is_rider){
+            return <Redirect to="/" />
+        }
         const {pick_up_address,drop_off_address,status,capacity} = this.state
         return (
             <section>
