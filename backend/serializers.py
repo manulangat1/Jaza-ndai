@@ -58,6 +58,8 @@ class TripSerializer(serializers.ModelSerializer):
             'price',
             'capacity',
             'geo_location',
+            'geo_location_lat',
+            'geo_location_long',
             'to_point'
         )
         read_only_fields = ('id','created','updated',)

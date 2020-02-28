@@ -62,6 +62,8 @@ class TripView(generics.ListCreateAPIView):
         serializer.save(kms=distance_in_km,
             price=p1,driver=self.request.user,
             geo_location=location_point,
+            geo_location_lat=lat,
+            geo_location_long=lng,
             to_point=drop_point
         )
     # print (list_lat, list_long)

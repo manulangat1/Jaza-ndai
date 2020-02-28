@@ -46,20 +46,14 @@ class Trip(models.Model):
         on_delete=models.DO_NOTHING,
         related_name='trips_as_driver'
         )
-    # rider = models.ForeignKey( # new
-    #     settings.AUTH_USER_MODEL,
-    #     null=True,
-    #     blank=True,
-    #     on_delete=models.DO_NOTHING,
-    #     related_name='trips_as_rider'
-    # )
     rider = models.ManyToManyField( # new
         settings.AUTH_USER_MODEL,
         blank=True,
-        # on_delete=models.DO_NOTHING,
         related_name='trips_as_rider'
     )
     geo_location = models.PointField(srid=4326,null=True,blank=True)
+    geo_location_lat = models.CharField(max_length=100,null=True,blank=True)
+    geo_location_long = models.CharField(max_length=100,null=True,blank=True)
     to_point = models.PointField(srid=4326,null=True,blank=True)
     # geo_objects = GeoManager()
     kms = models.PositiveIntegerField(default=0)
