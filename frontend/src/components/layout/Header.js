@@ -11,6 +11,7 @@ class Header extends React.Component {
                     <span>{ user ? `Welcome ${user.username }`: ""}</span>
                     <li><Link to="/">Home</Link></li>
                     <li><Link to="/add">Add </Link></li>
+                    <li><Link to="/maps">Map </Link></li>
                     <li>
                         <button onClick= {this.props.logout}>Logout</button>
                     </li>

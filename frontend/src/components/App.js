@@ -15,7 +15,8 @@ import Register from './auth/Register'
 import Login from './auth/Login'
 import AddTrip from './Trips/AddTrip'
 import TripDetails from './Trips/TripDetails'
-// import Maps from './Maps'
+import Maps from './Maps'
+import './styles/main.scss'
 class App extends React.Component {
 componentDidMount(){
     store.dispatch(loadUser())
@@ -24,7 +25,7 @@ render() {
    return (
        <Provider store={store}>
         <Router>
-            <main>
+            {/* <main className="map"> */}
                 <Header />
                     <Switch>
                         <PrivateRoute exact path="/" component={All} />
@@ -32,9 +33,12 @@ render() {
                         <Route exact path="/register" component={Register} />
                         <PrivateRoute exact path="/add" component={AddTrip} />
                         <PrivateRoute exact path="/trip/:id" component={TripDetails} />
+                        <div className="map">
+                            <PrivateRoute  exact path="/maps" component={Maps} />
+                        </div>
                     </Switch>
                 <Footer />
-            </main>
+            {/* </main> */}
        </Router>
        </Provider>
    )

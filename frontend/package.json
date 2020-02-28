@@ -27,13 +27,17 @@
   },
   "dependencies": {
     "babel-plugin-transform-class-properties": "^6.24.1",
+    "css-loader": "^3.4.2",
     "google-map-react": "^1.1.6",
     "leaflet": "^1.6.0",
+    "node-sass": "^4.13.1",
     "react-leaflet": "^2.6.1",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.1.2",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "sass-loader": "^8.0.2",
+    "style-loader": "^1.1.3"
   }
 }

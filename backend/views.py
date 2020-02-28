@@ -50,8 +50,8 @@ class TripView(generics.ListCreateAPIView):
         print(query)
         results = geocoder.geocode(query)
         print (results)
-        lat = results[0]['geometry']['lat']
-        lng = results[0]['geometry']['lng']
+        lat = float(results[0]['geometry']['lat'])
+        lng = float(results[0]['geometry']['lng'])
         print (lat, lng)
         drop_point = Point(lng, lat)
         print(drop_point)
@@ -125,6 +125,7 @@ class UserAPI(generics.RetrieveAPIView):
 def maps(request):
     trips = []
     for trip in Trip.objects.all():
+        print(trip.geo_location[0],trip.geo_location[1])
         trips.append(trip.pick_up_address)
     print(trips)
     for trip in trips:
@@ -134,5 +135,5 @@ def maps(request):
         results = geocoder.geocode(query)
         lat = results[0]['geometry']['lat']
         lng = results[0]['geometry']['lng']
-        print (lat, lng)
+        # print (lat, lng)
     return HttpResponse({"Got is"})
