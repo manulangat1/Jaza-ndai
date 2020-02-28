@@ -15,6 +15,7 @@ import Register from './auth/Register'
 import Login from './auth/Login'
 import AddTrip from './Trips/AddTrip'
 import TripDetails from './Trips/TripDetails'
+import History from './Trips/History'
 import Maps from './Maps'
 import './styles/main.scss'
 class App extends React.Component {
@@ -34,6 +35,7 @@ render() {
                         <Route exact path="/register" component={Register} />
                         <PrivateRoute exact path="/add" component={AddTrip} />
                         <PrivateRoute exact path="/trip/:id" component={TripDetails} />
+                        <PrivateRoute exact path="/history" component={History} />
                         {/* <div className="map"> */}
                             <PrivateRoute  exact path="/maps" component={Maps} />
                         {/* </div> */}

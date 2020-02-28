@@ -1,4 +1,8 @@
-import { GET_ALL_TRIPS,ADD_TRIP,TRIP_DETAILS,UPDATE_TRIP,JOIN_TRIP } from './types'
+import { GET_ALL_TRIPS,ADD_TRIP,
+        TRIP_DETAILS,UPDATE_TRIP,
+        JOIN_TRIP,GET_TRIPS_DRIVER,
+        GET_TRIPS_RIDER 
+        } from './types'
 import axios from 'axios'
 import { tokenConfig } from './auth'
 
@@ -32,6 +36,29 @@ export const tripDetails = id => (dispatch,getState) => {
         .then(res => {
             dispatch({
                 type:TRIP_DETAILS,
+                payload:res.data
+            })
+        })
+        .catch(err => console.log(err))
+}
+
+export const getDriver = () => (dispatch,getState) => {
+    axios
+        .get('api/all_driver/',tokenConfig(getState))
+        .then(res => {
+            dispatch({
+                type:GET_TRIPS_DRIVER,
+                payload:res.data
+            })
+        })
+        .catch(err => console.log(err))
+}
+export const getRider = () => (dispatch,getState) => {
+    axios
+        .get('api/all_rider/',tokenConfig(getState))
+        .then(res => {
+            dispatch({
+                type:GET_TRIPS_RIDER,
                 payload:res.data
             })
         })
