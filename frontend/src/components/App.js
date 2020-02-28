@@ -36,9 +36,6 @@ render() {
                         <PrivateRoute exact path="/add" component={AddTrip} />
                         <PrivateRoute exact path="/trip/:id" component={TripDetails} />
                         <PrivateRoute exact path="/history" component={History} />
-                        {/* <div className="map"> */}
-                            <PrivateRoute  exact path="/maps" component={Maps} />
-                        {/* </div> */}
                         </section>
                     </Switch>
                 <Footer />

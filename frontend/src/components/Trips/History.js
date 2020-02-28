@@ -15,7 +15,6 @@ class History extends React.Component{
         return(
             <section>
                 <div className="container">
-                    {/* <h1>hhhhhh</h1> */}
                     {
                         trips.map(trip => (
                             <div key={trip.id}>

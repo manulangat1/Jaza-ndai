@@ -7,6 +7,7 @@ urlpatterns = [
     path('all_driver/',views.GetAllTrips.as_view()),
     path('all_rider/',views.GetAllRider.as_view()),
     path('trip/',views.TripView.as_view()),
+    path('trips/',views.TripSearchView.as_view()),
     path('trip/<pk>/',views.TripDetailView.as_view()),
     path('trips/<pk>/',views.JoinTripView.as_view()),
     path('register/',views.RegisterAPI.as_view()),

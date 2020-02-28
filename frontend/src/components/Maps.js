@@ -1,8 +1,6 @@
 import React from "react";
 import { Map, Marker, Popup, TileLayer } from "react-leaflet";
 import { Icon } from "leaflet";
-// import * as parkData from "./data/skateboard-parks.json";
-// import "./app.css";
 import './styles/main.scss'
 import { getTrips } from '../actions/trips'
 import { connect } from 'react-redux'

@@ -13,22 +13,17 @@ from knox.models import AuthToken
 
 from opencage.geocoder import OpenCageGeocode
 from pprint import pprint
+from rest_framework import filters
 from django.http import HttpResponse
+# from django_filters.rest_framework import DjangoFilterBackend
 key = "fbef4f421fde4fbfbb85ba15cc7ad502"
-# Create your generics here.
-def find_geo(q):
-    geocoder = OpenCageGeocode(key)	
-    query = f'{q}, Kenya'  	
-    print(query)
-    results = geocoder.geocode(query)
-    print (results)
-    lat = results[0]['geometry']['lat']
-    lng = results[0]['geometry']['lng']
-    print (lat, lng)
+# Create your generics here.)
 class TripView(generics.ListCreateAPIView):
     permission_classes = [
         permissions.IsAuthenticated,
     ]
+    search_fields=['drop_off_address','pick_up_address']
+    fliter_backends = (filters.SearchFilter,)
     serializer_class = TripSerializer
     def get_queryset(self):
         lat = 1.2921
@@ -47,7 +42,6 @@ class TripView(generics.ListCreateAPIView):
         if user.is_driver == True:
             q = self.request.data['pick_up_address']
             z = self.request.data['drop_off_address']
-            # find_geo(q)
             geocoder = OpenCageGeocode(key)	
             query = f'{q}, Kenya'  	
             print(query)
@@ -170,3 +164,29 @@ class GetAllRider(generics.ListAPIView):
     def get_queryset(self):
         user = User.objects.filter(username=self.request.user).first()
         return Trip.objects.filter(rider=user).all()
+from django.shortcuts import get_object_or_404
+class MultipleFieldLookupMixin(object):
+    """
+    Apply this mixin to any view or viewset to get multiple field filtering
+    based on a `lookup_fields` attribute, instead of the default single field filtering.
+    """
+    def get_object(self):
+        queryset = self.get_queryset()             # Get the base queryset
+        queryset = self.filter_queryset(queryset)  # Apply any filter backends
+        filter = {}
+        for field in self.lookup_fields:
+            if self.kwargs[field]: # Ignore empty fields.
+                filter[field] = self.kwargs[field]
+        obj = get_object_or_404(queryset, **filter)  # Lookup the object
+        self.check_object_permissions(self.request, obj)
+        return obj
+class TripSearchView(generics.RetrieveAPIView):
+    # permission_classes = [
+    #     permissions.IsAuthenticated,
+    # ]
+    serializer_class = TripSerializer
+    def get_queryset(self):
+        # print(self.request.user)
+        return Trip.objects.all()
+    search_fields = ['drop_off_address']
+    filter_backends = (filters.SearchFilter,)
