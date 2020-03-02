@@ -4,6 +4,7 @@ from django.contrib.gis.db import models
 from django.contrib.auth.models import AbstractUser
 from django.shortcuts import reverse
 from django.conf import settings
+from timezone_field  import TimeZoneField
 # Create your models here.
 class User(AbstractUser):
     tel_no = models.CharField(max_length=18,default=0)
@@ -59,6 +60,8 @@ class Trip(models.Model):
     # geo_objects = GeoManager()
     kms = models.PositiveIntegerField(default=0)
     price = models.PositiveIntegerField(default=0)
+    take_off_time = models.DateTimeField(blank=True,null=True)
+    time_zone = TimeZoneField(default='UTC',blank=True,null=True)
     def get_price(self):
         p = self.kms * 58
         self.price = p 

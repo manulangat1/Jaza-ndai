@@ -8,22 +8,26 @@ from .models import Trip,User
 from rest_framework import viewsets
 from rest_framework import generics,permissions
 from rest_framework.response import Response
+import arrow
+import dramatiq
+from django.conf import settings
+from twilio.rest import Client
 
 from knox.models import AuthToken
 
 from opencage.geocoder import OpenCageGeocode
 from pprint import pprint
-from rest_framework import filters
+# from rest_framework import filters
 from django.http import HttpResponse
-from django_filters.rest_framework import DjangoFilterBackend
+from django_filters import FilterSet
+from django_filters.rest_framework import DjangoFilterBackend,filters
+client = Client(settings.TWILIO_ACCOUNT_SID,settings.TWILIO_AUTH_TOKEN)
 key = "fbef4f421fde4fbfbb85ba15cc7ad502"
 # Create your generics here.)
 class TripView(generics.ListCreateAPIView):
     permission_classes = [
         permissions.IsAuthenticated,
     ]
-    search_fields=['drop_off_address','pick_up_address']
-    fliter_backends = (filters.SearchFilter,)
     serializer_class = TripSerializer
     def get_queryset(self):
         lat = 1.2921
@@ -88,18 +92,35 @@ class JoinTripView(generics.RetrieveUpdateAPIView):
     queryset = Trip.objects.all()
     serializer_class = TripSerializer
     def update(self, request, *args, **kwargs):
-        # print(request.data)
         instance = self.get_object()
+        # if self.request.
+        # print(instance.driver.tel_no)
         if instance.rider == self.request.user:
             print(instance.rider.count())
             return Response({"Already signed up"})
         if self.request.user == instance.driver:
             # print(instance.rider)
-            return Response({"updated successfully"})
+            return Response({"updatsuccessfully"})
+        # if self.request.user in 
         if instance.rider.count() == instance.capacity:
             return Response("Car is already full")
-        instance.rider.add(self.request.user)
-        print(instance.rider.count())
+        if self.request.user in instance.rider.all():
+            print("Already sub")
+        else:
+            instance.rider.add(self.request.user)
+            body = 'Hi {0}, You have booked a trip, Call the driver at {1} '.format(
+                self.request.user,
+                instance.driver.tel_no
+            )
+            user = User.objects.get(username=self.request.user)
+            print(user.tel_no)
+            client.messages.create(
+                body=body,
+                to=user.tel_no,
+                from_=settings.TWILIO_NUMBER,
+            )
+            print(instance.rider.count())
+            return Response({"Added successfully"})
         return Response({"updated successfully"})
 class RegisterAPI(generics.GenericAPIView):
     serializer_class = RegisterSerilizer
@@ -164,21 +185,13 @@ class GetAllRider(generics.ListAPIView):
         user = User.objects.filter(username=self.request.user).first()
         return Trip.objects.filter(rider=user).all()
 from django.shortcuts import get_object_or_404
-class MultipleFieldLookupMixin(object):
-    """
-    Apply this mixin to any view or viewset to get multiple field filtering
-    based on a `lookup_fields` attribute, instead of the default single field filtering.
-    """
-    def get_object(self):
-        queryset = self.get_queryset()             # Get the base queryset
-        queryset = self.filter_queryset(queryset)  # Apply any filter backends
-        filter = {}
-        for field in self.lookup_fields:
-            if self.kwargs[field]: # Ignore empty fields.
-                filter[field] = self.kwargs[field]
-        obj = get_object_or_404(queryset, **filter)  # Lookup the object
-        self.check_object_permissions(self.request, obj)
-        return obj
+class TripFilter(FilterSet):
+    pick_up_address = filters.CharFilter('pick_up_address')
+    drop_off_address = filters.CharFilter('drop_off_address')
+
+    class Meta:
+        model = Trip
+        fields = ('pick_up_address','drop_off_address',)
 class TripSearchView(generics.ListAPIView):
     # permission_classes = [
     #     permissions.IsAuthenticated,
@@ -188,6 +201,4 @@ class TripSearchView(generics.ListAPIView):
     def get_queryset(self):
         return Trip.objects.all()
     filter_fields = ('pick_up_address','drop_off_address',)
-    # search_fields = ('drop_off_address','pick_up_address',)
-    # filter_backends = (filters.SearchFilter,)
-    
+    # filter_class = TripFilter

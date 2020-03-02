@@ -127,3 +127,23 @@ ASGI_APPLICATION = 'taxi.routing.application'
 # AUTH_USER_MODEL ='backend.User'
 # AUTH_USER_MODEL = `backend.User`
 AUTH_USER_MODEL = 'backend.User'
+
+TWILIO_ACCOUNT_SID = "ACc8e3a5361026364333bcd339433f54f9"
+TWILIO_AUTH_TOKEN = "7fe88c5e0fe9ce0c7e8bc83128496abf"
+TWILIO_NUMBER = "+1 207 477 7406"
+
+DRAMATIQ_BROKER = {
+    "BROKER": "dramatiq.brokers.redis.RedisBroker",
+    "OPTIONS": {
+        "url": 'redis://localhost:6379/0',
+    },
+    "MIDDLEWARE": [
+        "dramatiq.middleware.Prometheus",
+        "dramatiq.middleware.AgeLimit",
+        "dramatiq.middleware.TimeLimit",
+        "dramatiq.middleware.Callbacks",
+        "dramatiq.middleware.Retries",
+        "django_dramatiq.middleware.AdminMiddleware",
+        "django_dramatiq.middleware.DbConnectionsMiddleware",
+    ]
+}

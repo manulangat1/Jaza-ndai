@@ -36,7 +36,7 @@ class All extends React.Component {
                 <button>Submit</button>
                 </form>
                 
-                <Map center={position} zoom={6}>
+                <Map center={position} zoom={7.3}>
                     <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
