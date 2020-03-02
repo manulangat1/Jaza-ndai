@@ -15,7 +15,7 @@ from opencage.geocoder import OpenCageGeocode
 from pprint import pprint
 from rest_framework import filters
 from django.http import HttpResponse
-# from django_filters.rest_framework import DjangoFilterBackend
+from django_filters.rest_framework import DjangoFilterBackend
 key = "fbef4f421fde4fbfbb85ba15cc7ad502"
 # Create your generics here.)
 class TripView(generics.ListCreateAPIView):
@@ -75,7 +75,6 @@ class TripView(generics.ListCreateAPIView):
             )
         else:
             return Response({"You dont have permissions to add"})
-    # print (list_lat, list_long)
 class TripDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [
         permissions.IsAuthenticated,
@@ -95,7 +94,7 @@ class JoinTripView(generics.RetrieveUpdateAPIView):
             print(instance.rider.count())
             return Response({"Already signed up"})
         if self.request.user == instance.driver:
-            print(instance.rider)
+            # print(instance.rider)
             return Response({"updated successfully"})
         if instance.rider.count() == instance.capacity:
             return Response("Car is already full")
@@ -184,9 +183,11 @@ class TripSearchView(generics.ListAPIView):
     # permission_classes = [
     #     permissions.IsAuthenticated,
     # ]
+    filter_backends = (DjangoFilterBackend,)
     serializer_class = TripSerializer
     def get_queryset(self):
-        # print(self.request.user)
         return Trip.objects.all()
-    search_fields = ('drop_off_address','pick_up_address',)
-    filter_backends = (filters.SearchFilter,)
+    filter_fields = ('pick_up_address','drop_off_address',)
+    # search_fields = ('drop_off_address','pick_up_address',)
+    # filter_backends = (filters.SearchFilter,)
+    

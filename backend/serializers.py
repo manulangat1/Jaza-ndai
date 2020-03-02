@@ -42,7 +42,8 @@ class UserSerilizer(serializers.ModelSerializer):
             'email',
             'tel_no',
             'is_driver',
-            'is_rider'
+            'is_rider',
+            'pic'
         )
 class TripSerializer(serializers.ModelSerializer):
     class Meta:

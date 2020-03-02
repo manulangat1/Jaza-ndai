@@ -1,7 +1,8 @@
 import { GET_ALL_TRIPS,ADD_TRIP,
         TRIP_DETAILS,UPDATE_TRIP,
         JOIN_TRIP,GET_TRIPS_DRIVER,
-        GET_TRIPS_RIDER 
+        GET_TRIPS_RIDER ,
+        SEARCH_TRIPS
         } from './types'
 import axios from 'axios'
 import { tokenConfig } from './auth'
@@ -63,4 +64,16 @@ export const getRider = () => (dispatch,getState) => {
             })
         })
         .catch(err => console.log(err))
+}
+
+export const searchTrips = (pick_up_address,drop_off_address) => (dispatch,getState) => {
+    console.log(pick_up_address,drop_off_address)
+    axios.get(`/api/trips/?pick_up_address=${pick_up_address}&drop_off_address=${drop_off_address}`,null,tokenConfig(getState))
+         .then(res => {
+             dispatch({
+                 type:SEARCH_TRIPS,
+                 payload:res.data
+             })
+         })
+         .catch(err => console.log(err))
 }

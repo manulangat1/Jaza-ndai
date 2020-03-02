@@ -1,5 +1,5 @@
 import React from 'react'
-import { getTrips } from '../../actions/trips'
+import { getTrips,searchTrips } from '../../actions/trips'
 import { connect } from 'react-redux'
 import { Redirect,withRouter,Link } from 'react-router-dom'
 import { Map, Marker, Popup, TileLayer } from "react-leaflet";
@@ -9,14 +9,16 @@ class All extends React.Component {
         pick_up_address:'',
         drop_off_address:''
     }
-    // componentDidMount(){
-    //     this.props.getTrips()
-    // }
     onChange = e => this.setState({[e.target.name]:e.target.value})
     onSubmit = e => {
         e.preventDefault()
-        console.log("submitted")
-        this.props.getTrips()
+        // console.log("submitted")
+        const {pick_up_address,drop_off_address } = this.state
+        // console.log(pick_up_address,drop_off_address)
+        const newSearch ={
+            pick_up_address,drop_off_address
+        }
+        this.props.searchTrips(pick_up_address,drop_off_address)
     }
     render(){
         const{trips} = this.props
@@ -58,4 +60,4 @@ class All extends React.Component {
 const mapStateToProps = state => ({
     trips:state.trips.trips
 })
-export default connect(mapStateToProps,{getTrips}) (All)
+export default connect(mapStateToProps,{getTrips,searchTrips}) (All)

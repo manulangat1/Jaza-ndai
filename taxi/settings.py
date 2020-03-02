@@ -32,7 +32,7 @@ INSTALLED_APPS = [
     'knox',
     'channels',
     'django.contrib.gis',
-    # 'django_filters'
+    'django_filters'
 ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ( 'knox.auth.TokenAuthentication',),

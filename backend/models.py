@@ -7,6 +7,7 @@ from django.conf import settings
 # Create your models here.
 class User(AbstractUser):
     tel_no = models.CharField(max_length=18,default=0)
+    pic = models.ImageField(upload_to='pictures/',blank=True,null=True)
     is_driver = models.BooleanField(default=False)
     is_rider = models.BooleanField(default=False)
     # def __str__(self):
