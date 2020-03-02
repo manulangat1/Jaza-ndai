@@ -180,7 +180,7 @@ class MultipleFieldLookupMixin(object):
         obj = get_object_or_404(queryset, **filter)  # Lookup the object
         self.check_object_permissions(self.request, obj)
         return obj
-class TripSearchView(generics.RetrieveAPIView):
+class TripSearchView(generics.ListAPIView):
     # permission_classes = [
     #     permissions.IsAuthenticated,
     # ]
@@ -188,5 +188,5 @@ class TripSearchView(generics.RetrieveAPIView):
     def get_queryset(self):
         # print(self.request.user)
         return Trip.objects.all()
-    search_fields = ['drop_off_address']
+    search_fields = ('drop_off_address','pick_up_address',)
     filter_backends = (filters.SearchFilter,)
