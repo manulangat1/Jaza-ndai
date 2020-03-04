@@ -17,6 +17,8 @@ import AddTrip from './Trips/AddTrip'
 import TripDetails from './Trips/TripDetails'
 import History from './Trips/History'
 import Maps from './Maps'
+import Profile from './auth/Profile'
+import P from './common/P'
 import './styles/main.scss'
 class App extends React.Component {
 componentDidMount(){
@@ -36,6 +38,8 @@ render() {
                         <PrivateRoute exact path="/add" component={AddTrip} />
                         <PrivateRoute exact path="/trip/:id" component={TripDetails} />
                         <PrivateRoute exact path="/history" component={History} />
+                        <PrivateRoute exact path="/profile" component={Profile} />
+                        <PrivateRoute exact path="/p" component={P} />
                         </section>
                     </Switch>
                 <Footer />

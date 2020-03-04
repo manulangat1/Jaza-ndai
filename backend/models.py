@@ -11,8 +11,8 @@ class User(AbstractUser):
     pic = models.ImageField(upload_to='pictures/',blank=True,null=True)
     is_driver = models.BooleanField(default=False)
     is_rider = models.BooleanField(default=False)
-    # def __str__(self):
-    #     return self.tel_no
+    def __str__(self):
+        return self.username
 class Driver(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
     
@@ -61,7 +61,7 @@ class Trip(models.Model):
     kms = models.PositiveIntegerField(default=0)
     price = models.PositiveIntegerField(default=0)
     take_off_time = models.DateTimeField(blank=True,null=True)
-    time_zone = TimeZoneField(default='UTC',blank=True,null=True)
+    # time_zone = TimeZoneField(default='UTC',blank=True,null=True)
     def get_price(self):
         p = self.kms * 58
         self.price = p 

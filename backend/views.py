@@ -202,3 +202,11 @@ class TripSearchView(generics.ListAPIView):
         return Trip.objects.all()
     filter_fields = ('pick_up_address','drop_off_address',)
     # filter_class = TripFilter
+class TripDriver(generics.ListAPIView):
+    serializer_class = UserSerilizer
+    def get_queryset(self):
+        # print(self.request.username)
+        user = User.objects.all()
+        return user
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ('username',)

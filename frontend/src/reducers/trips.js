@@ -3,24 +3,31 @@ import { GET_ALL_TRIPS,
     UPDATE_TRIP,JOIN_TRIP,
     GET_TRIPS_DRIVER,
     GET_TRIPS_RIDER,
-    SEARCH_TRIPS
+    SEARCH_TRIPS,
+    GET_DRIVER
   } from '../actions/types'
 
 const initialState = {
     trips:[],
     trip:[],
-    tripData:[]
+    tripData:[],
+    tripS:[],
+    driver:[]
 }
 export default function(state=initialState,action){
     switch(action.type){
         case GET_ALL_TRIPS:
-        case GET_TRIPS_DRIVER:
-        case GET_TRIPS_RIDER:
         case SEARCH_TRIPS:
             return{
                 ...state,
                 trips:action.payload
             }
+        case GET_TRIPS_DRIVER:
+        case GET_TRIPS_RIDER:
+                return{
+                    ...state,
+                    tripS:action.payload
+                }
         case ADD_TRIP:
             return{
                 ...state,
@@ -30,6 +37,11 @@ export default function(state=initialState,action){
             return {
                 ...state,
                 trip:action.payload
+            }
+        case GET_DRIVER:
+            return {
+                ...state,
+                driver:action.payload
             }
         case JOIN_TRIP:
             return{

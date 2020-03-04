@@ -45,7 +45,12 @@ class UserSerilizer(serializers.ModelSerializer):
             'is_rider',
             'pic'
         )
+class StringSerializer(serializers.StringRelatedField):
+    def to_internal_value(self,value):
+        return value
 class TripSerializer(serializers.ModelSerializer):
+    driver = StringSerializer()
+    # rider = StringSerializer()
     class Meta:
         model = Trip
         fields = (
@@ -67,6 +72,14 @@ class TripSerializer(serializers.ModelSerializer):
             'take_off_time',
         )
         read_only_fields = ('id','created','updated',)
+    # def get_driver(self,obj):
+    #     driver_name=obj.driver
+    #     user = User.objects.get(username=driver_name)
+    #     print(user)
+    #     return UserSerilizer(obj.driver.all(),many=True).data
+        # QuestionSerializer(obj.questions.all(),many=True).data
+    # def get_rider(self,obj):
+    #     return UserSerilizer(obj.rider).data
 class ReadOnlyTripSerializer(serializers.ModelSerializer):
     # driver = UserSerilizer(read_only=True)
     # rider = UserSerilizer(read_only=True)

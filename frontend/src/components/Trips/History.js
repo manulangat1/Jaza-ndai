@@ -28,7 +28,7 @@ class History extends React.Component{
     }
 }
 const mapStateToProps = state => ({
-    trips:state.trips.trips,
+    trips:state.trips.tripS,
     auth:state.auth.user
 })
 export default connect(mapStateToProps,{getDriver,getRider})(History)

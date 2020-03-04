@@ -21,19 +21,36 @@ class Login extends React.Component{
         }
         const {username,password} = this.state
         return(
-            <section>
+            <section id="wrapper">
+                <div id="left">
+                <div className="logo">
+                    <i class="fas fa-taxi fa-7x"></i>
+                    <p>Book a ride</p>
+                </div>
+                <div id="signin">
                 <form onSubmit={this.onSubmit}>
                     <div>
                         <label>Username</label>
-                        <input type="text" value={username} onChange={this.onChange} name="username"  />
+                        <input type="text" value={username} onChange={this.onChange} name="username" className="form-control"  />
                     </div>
                     <div>
                         <label>Password</label>
-                        <input type="password" value={password} onChange={this.onChange} name="password"  />
+                        <input type="password" value={password} onChange={this.onChange} name="password" className="form-control"  />
                     </div>
-                    <button>Log in </button>
-                    <Link to="/register">Register</Link>
+                    <button className="primary-btn">Log in </button>
                 </form>
+                </div>
+                </div>
+                <div id="right">
+                    <div id="showcase">
+                    <div className="showcase">
+                        <h1 className="showcase-text">
+                            Go as you earn ....
+                        </h1>
+                        <Link to="/register" className="secondary-btn">Register</Link>
+                    </div>
+                    </div>
+                </div>
             </section>
         )
     }
