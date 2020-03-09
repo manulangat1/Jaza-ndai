@@ -9,27 +9,38 @@ class Header extends React.Component {
             <ul>
                 <li><Link to="/">Home</Link></li>
                     <li><Link to="/add">Add </Link></li>
-                    <li><Link to="/history">History </Link></li>
-                    <li><Link to="/p">P </Link></li>
                     <li>
-                        <button onClick= {this.props.logout}>Logout</button>
+                    <div class="dropdown">
+                    <button class="dropbtn"><i class="fas fa-user-tie"> { user ? `${user.username }`: ""}</i></button>
+                    <div class="dropdown-content">
+                        {/* <a href="#">Link 1</a>  
+                          */}
+                        <Link to="/profile">Profile </Link>
+                        <a><button onClick= {this.props.logout}><i class="fas fa-sign-out-alt"> Log out</i></button></a>
+                    </div>
+                    </div>
                     </li>
             </ul>
         )
         const riderLinks = (
             <ul>
                 <li><Link to="/">Home</Link></li>
-                <li><Link to="/history">History </Link></li>
-                <li><Link to="/p">P </Link></li>
                 <li>
-                        <button onClick= {this.props.logout}>Logout</button>
+                        {/* <button onClick= {this.props.logout}>Logout</button> */}
+                        <div class="dropdown">
+                    <button class="dropbtn"><i class="fas fa-user-tie"> { user ? `${user.username }`: ""}</i></button>
+                    <div class="dropdown-content">
+                        {/* <a href="#">Link 1</a>  
+                          */}
+                        <Link to="/profile">Profile </Link>
+                        <a><button onClick= {this.props.logout}><i class="fas fa-sign-out-alt"> Log out</i></button></a>
+                    </div>
+                    </div>
                     </li>
         </ul>
         )
         const authLinks = (
             <ul>
-                    <span className="name">{ user ? `Welcome ${user.username }`: ""}</span>
-                    {/* <span>{ user && user.is_driver ? `Welcome ${user.username }`: "hey"}</span> */}
                     { user && user.is_driver ? driverLinks : riderLinks}   
                 </ul>
         )
@@ -42,7 +53,15 @@ class Header extends React.Component {
         return(
             <header>
                 <div className="container">
-                { isAuthenticated ? authLinks : guestLinks}   
+                <div classsName='grids'>
+                    {/* <div> */}
+                        {/* <h1>My Ride</h1> */}
+                    {/* </div>
+                    <div> */}
+                    { isAuthenticated ? authLinks : guestLinks} 
+                    {/* </div> */}
+                  
+                </div>
                 </div>    
             </header>
         )

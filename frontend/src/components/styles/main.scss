@@ -84,6 +84,58 @@ header{
             text-decoration: underline;
         }
     }
+    .grids{
+        display: grid;
+        grid-template-columns: repeat(2,1fr);
+        h1{
+            padding: 0;
+            margin-top: 0;
+        }
+    }
+    /* Dropdown Button */
+.dropbtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 6px 12px;
+    font-size: 16px;
+    border: none;
+  }
+  
+  /* The container <div> - needed to position the dropdown content */
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  /* Dropdown Content (Hidden by Default) */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #ff7b39;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  
+  /* Links inside the dropdown */
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  /* Change color of dropdown links on hover */
+  .dropdown-content a:hover {
+      background-color: #ff7b39;
+      z-index: 99;
+}
+  
+  /* Show the dropdown menu on hover */
+  .dropdown:hover .dropdown-content {display: block;}
+  
+  /* Change the background color of the dropdown button when the dropdown content is shown */
+  .dropdown:hover .dropbtn {background-color: #3e8e41;}
 }
 #app{
     height: 80vh;
@@ -98,9 +150,10 @@ header{
     width: 100%;
   }
 #wrapper{
-    background-color: #181818;
+    // background-color: #181818;
+    background-color: rgb(55,100,144);
     color: #fff;
-    height: 100vh;
+    height: 80vh;
     display: flex;
     flex-direction: row;
     #left{
@@ -111,8 +164,8 @@ header{
         justify-content: center;
         .logo{
             margin-bottom: 3.5rem;
-            // color:#ff7b39;
-            color:#f783ac;
+            color:#ff7b39;
+            // color:#f783ac;
             text-align: center;
         }
         #sigin{
@@ -163,6 +216,18 @@ header{
     padding: 2rem;
     p{
         margin-bottom: 0.5rem;
+    }
+    .container{
+        display: grid;
+        grid-template-columns: repeat(2,1fr);
+        grid-gap: 1rem;
+    }
+}
+#profile{
+    padding: 2rem;
+    .secondary-btn{
+        width: 400px;
+        color:#181818;
     }
     .container{
         display: grid;
