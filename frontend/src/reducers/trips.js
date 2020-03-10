@@ -4,7 +4,9 @@ import { GET_ALL_TRIPS,
     GET_TRIPS_DRIVER,
     GET_TRIPS_RIDER,
     SEARCH_TRIPS,
-    GET_DRIVER
+    GET_DRIVER,
+    COMPLETE_TRIP,
+    GET_TRANSIT
   } from '../actions/types'
 
 const initialState = {
@@ -12,10 +14,17 @@ const initialState = {
     trip:[],
     tripData:[],
     tripS:[],
-    driver:[]
+    driver:[],
+    complete:[],
+    onT:[]
 }
 export default function(state=initialState,action){
     switch(action.type){
+        case COMPLETE_TRIP:
+            return{
+                ...state,
+                complete:action.payload
+            }
         case GET_ALL_TRIPS:
         case SEARCH_TRIPS:
             return{
@@ -32,6 +41,11 @@ export default function(state=initialState,action){
             return{
                 ...state,
                 trips:[...trips,action.payload]
+            }
+        case GET_TRANSIT:
+            return{
+                ...state,
+                onT:action.payload
             }
         case TRIP_DETAILS:
             return {

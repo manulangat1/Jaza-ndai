@@ -2,13 +2,27 @@ import React from 'react'
 import { Link } from 'react-router-dom'
  import { logout } from '../../actions/auth'
 import { connect } from 'react-redux'
+import LoginModal from '../Trips/LoginModal'
 class Header extends React.Component {
+    state = {
+        modalOpen: false
+     }
+   
+     handleModalOpen = () => {
+        this.setState((prevState) => {
+           return{
+              modalOpen: !prevState.modalOpen
+           }
+        })
+     }
     render(){
         const { isAuthenticated,user} = this.props.auth
         const driverLinks = (
             <ul>
-                <li><Link to="/">Home</Link></li>
+                <li><Link to="/" onClick={this.handleModalOpen}>Home
+                    </Link></li>
                     <li><Link to="/add">Add </Link></li>
+                    <li><Link to="/transit">Transit </Link></li>
                     <li>
                     <div class="dropdown">
                     <button class="dropbtn"><i class="fas fa-user-tie"> { user ? `${user.username }`: ""}</i></button>
@@ -24,7 +38,8 @@ class Header extends React.Component {
         )
         const riderLinks = (
             <ul>
-                <li><Link to="/">Home</Link></li>
+                <li><Link to="/" onClick={this.handleModalOpen}>Home</Link></li>
+                <li><Link to="/transit">Transit </Link></li>
                 <li>
                         {/* <button onClick= {this.props.logout}>Logout</button> */}
                         <div class="dropdown">
@@ -51,6 +66,7 @@ class Header extends React.Component {
                 </ul>
         )
         return(
+            <main>
             <header>
                 <div className="container">
                 <div classsName='grids'>
@@ -64,6 +80,11 @@ class Header extends React.Component {
                 </div>
                 </div>    
             </header>
+            <LoginModal
+           modalOpen={this.state.modalOpen}
+           handleModalOpen={this.handleModalOpen}
+        />
+            </main>
         )
     }
 }

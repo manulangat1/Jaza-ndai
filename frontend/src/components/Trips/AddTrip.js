@@ -2,19 +2,21 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { AddTrips } from '../../actions/trips'
 import { Redirect,withRouter } from 'react-router-dom'
+import '../styles/main.scss';
 class AddTrip extends React.Component{
     state = {
         pick_up_address:'',
         drop_off_address:'',
         status:'',
-        capacity:''
+        capacity:'',
+        date:''
     }
     onChange = e => this.setState({[e.target.name]:e.target.value})
     onSubmit = e => {
         e.preventDefault()
-        const {pick_up_address,drop_off_address,status,capacity} = this.state
+        const {pick_up_address,drop_off_address,status,capacity,date} = this.state
         const newTrip ={
-            pick_up_address,drop_off_address,status,capacity
+            pick_up_address,drop_off_address,status,capacity,date
         }
         this.props.AddTrips(newTrip)
         console.log('submitted')
@@ -24,28 +26,32 @@ class AddTrip extends React.Component{
         if (this.props.auth.user.is_rider){
             return <Redirect to="/" />
         }
-        const {pick_up_address,drop_off_address,status,capacity} = this.state
+        const {pick_up_address,drop_off_address,status,capacity,date} = this.state
         return (
             <section id="add">
                 <div className="container">
-                <form onSubmit={this.onSubmit}>
+                <form onSubmit={this.onSubmit} className="classForm">
                     <div>
                         <label>From</label>
-                        <input type="text" value={pick_up_address} onChange={this.onChange} name="pick_up_address"  />
+                        <input type="text" required value={pick_up_address} className="form-control" onChange={this.onChange} name="pick_up_address"  />
                     </div>
                     <div>
                         <label>drop_off_address</label>
-                        <input type="text" value={drop_off_address} onChange={this.onChange} name="drop_off_address"  />
+                        <input type="text" required value={drop_off_address} className="form-control" onChange={this.onChange} name="drop_off_address"  />
                     </div>
                     <div>
                         <label>status</label>
-                        <input type="text" value={status} onChange={this.onChange} name="status"  />
+                        <input type="text" required value={status} className="form-control" onChange={this.onChange} name="status"  />
                     </div>
                     <div>
                         <label>Capacity</label>
-                        <input type="number" value={capacity} onChange={this.onChange} name="capacity"  />
+                        <input type="number" required value={capacity} className="form-control" onChange={this.onChange} name="capacity"  />
                     </div>
-                    <button> Add Trips </button>
+                    <div>
+                        <label>Take off</label>
+                        <input type="time" required value={date} className="form-control" onChange={this.onChange} name="date"  />
+                    </div>
+                    <button className="primary-btn"> Add Trips </button>
                     {/* <Link to="/register">Register</Link> */}
                 </form>
                 </div>

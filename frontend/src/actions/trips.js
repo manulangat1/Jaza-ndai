@@ -3,7 +3,9 @@ import { GET_ALL_TRIPS,ADD_TRIP,
         JOIN_TRIP,GET_TRIPS_DRIVER,
         GET_TRIPS_RIDER ,
         SEARCH_TRIPS,
-        GET_DRIVER
+        GET_DRIVER,
+        COMPLETE_TRIP,
+        GET_TRANSIT
         } from './types'
 import axios from 'axios'
 import { tokenConfig } from './auth'
@@ -20,8 +22,8 @@ export const getTrips = () => (dispatch,getState) => (
              err => console.log(err)
          )
 )
-export const AddTrips = ({pick_up_address,drop_off_address,status,capacity}) => (dispatch,getState) => {
-    const body = JSON.stringify({pick_up_address,drop_off_address,status,capacity})
+export const AddTrips = ({pick_up_address,drop_off_address,status,capacity,date}) => (dispatch,getState) => {
+    const body = JSON.stringify({pick_up_address,drop_off_address,status,capacity,date})
     console.log(body)
     axios
         .post('/api/trip/',body,tokenConfig(getState))
@@ -85,6 +87,26 @@ export const loadDriver = username => (dispatch,getState) => {
         .then(res => {
             dispatch({
                 type:GET_DRIVER,
+                payload:res.data
+            })
+        })
+        .catch(err => console.log(err))
+}
+export const completeView = id => (dispatch,getState) => {
+    axios.put(`/api/transit/complete/${id}`,tokenConfig(getState))
+        .then(res => {
+            dispatch({
+                type:COMPLETE_TRIP,
+                payload:res.data
+            })
+        })
+        .catch(err => consoel.log(error))
+}
+export const transitView = () => ( dispatch,getState) => {
+    axios.get("/api/transit/",tokenConfig(getState))
+        .then(res => {
+            dispatch({
+                type:GET_TRANSIT,
                 payload:res.data
             })
         })

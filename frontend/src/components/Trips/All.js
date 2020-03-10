@@ -4,38 +4,70 @@ import { connect } from 'react-redux'
 import { Redirect,withRouter,Link } from 'react-router-dom'
 import { Map, Marker, Popup, TileLayer } from "react-leaflet";
 import { Icon } from "leaflet";
+import LoginModal from './LoginModal'
 class All extends React.Component {
     state = {
         pick_up_address:'',
-        drop_off_address:''
-    }
+        drop_off_address:'',
+        modalOpen: false,
+        trips:[]
+    }        
+    static getDerivedStateFromProps(nextProps, prevState){
+        // console.log(this.state.trips)
+        if(nextProps.trips!==prevState.trips){
+            // this.setState({trips:})
+            return {trips:nextProps.trips}
+            // console.log(this.state.trips)
+        }}
+     handleModalOpen = () => {
+        this.setState((prevState) => {
+           return{
+              modalOpen: !prevState.modalOpen
+           }
+        })
+     }
     onChange = e => this.setState({[e.target.name]:e.target.value})
     onSubmit = e => {
         e.preventDefault()
         // console.log("submitted")
         const {pick_up_address,drop_off_address } = this.state
         // console.log(pick_up_address,drop_off_address)
-        const newSearch ={
-            pick_up_address,drop_off_address
-        }
         this.props.searchTrips(pick_up_address,drop_off_address)
     }
+    clearState = e => {
+        // this.setState({trips:null})
+        // console.log(this.props.trips)
+        console.log("State",this.state.trips)
+        this.setState({trips:null})
+        console.log(this.state.trips)
+        
+    }
     render(){
-        const{trips} = this.props
+        // const{trips} = this.props
+        const {trips } = this.state
         const position = [0.0236,37.9062]
         const {pick_up_address,drop_off_address} = this.state
         return(
             <section>
-                <form onSubmit={this.onSubmit}>
-                <div>
-                <input type="text" value={pick_up_address} onChange={this.onChange} name="pick_up_address"  />
-                </div>
-                <div>
-                <input type="text" value={drop_off_address} onChange={this.onChange} name="drop_off_address"  />
-                </div>
-                <button>Submit</button>
-                </form>
-                
+                <LoginModal
+                onChange={this.onChange}
+                onSubmit = {this.onSubmit}
+                modalOpen={this.state.modalOpen}
+                handleModalOpen={this.handleModalOpen}
+                />
+                {/* <SearchModal modalOpen={this.state.modalOpen} handleModalOpen={this.handleModalOpen}/> */}
+                    {/* <div className="container">
+                        <form onSubmit={this.onSubmit} className="form-inline">
+                        <div>
+                        <input type="text" value={pick_up_address} onChange={this.onChange} name="pick_up_address" className="form-control"  />
+                        </div>
+                        <div>
+                        <input type="text" value={drop_off_address} onChange={this.onChange} name="drop_off_address"  className="form-control" />
+                        </div>
+                        <button onClick={this.hideModal}>Submit</button>
+                        </form> 
+                         </div> */}
+                {/* <button onClick={this.handleModalOpen} >Searc</button> */}
                 <Map center={position} zoom={7.3}>
                     <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -48,9 +80,19 @@ class All extends React.Component {
                     >
                         <Popup>
                             <p>{trip.price}</p>
-                            <Link to={`trip/${trip.id}`}>Book ride</Link>
+                            <Link to={`trip/${trip.id}`} onClick={this.clearState}>Book ride</Link>
                             </Popup>
                         </Marker>
+                        // hdhddhdhd
+                    //     <Marker
+                    //     key={trip.id}
+                    //     position={[trip.geo_location_lat, trip.geo_location_long]}
+                    // >
+                    //     <Popup>
+                    //         <p>{trip.price}</p>
+                    //         <Link to={`trip/${trip.id}`} onClick={this.clearState}>Book ride</Link>
+                    //         </Popup>
+                    //     </Marker>
                     ))}
             </Map>
             </section>

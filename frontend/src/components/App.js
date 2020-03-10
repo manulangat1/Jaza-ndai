@@ -20,6 +20,8 @@ import Maps from './Maps'
 import Profile from './auth/Profile'
 import P from './common/P'
 import './styles/main.scss'
+import Help from './layout/Help'
+import Transit from './Trips/Transit'
 class App extends React.Component {
 componentDidMount(){
     store.dispatch(loadUser())
@@ -34,12 +36,13 @@ render() {
                         <section id="app">
                         <PrivateRoute exact path="/" component={All} />
                         <Route exact path="/login" component={Login} />
+                        <Route exact path="/help" component="Help" />
                         <Route exact path="/register" component={Register} />
                         <PrivateRoute exact path="/add" component={AddTrip} />
                         <PrivateRoute exact path="/trip/:id" component={TripDetails} />
                         <PrivateRoute exact path="/history" component={History} />
                         <PrivateRoute exact path="/profile" component={Profile} />
-                        <PrivateRoute exact path="/p" component={P} />
+                        <PrivateRoute exact path="/transit" component={Transit} />
                         </section>
                     </Switch>
                 <Footer />

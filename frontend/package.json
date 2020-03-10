@@ -36,6 +36,7 @@
     "react-p5-wrapper": "^2.0.0",
     "react-particles-js": "^2.7.1",
     "react-redux": "^7.2.0",
+    "react-responsive-modal": "^4.0.1",
     "react-router-dom": "^5.1.2",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",

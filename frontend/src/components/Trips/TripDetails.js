@@ -1,5 +1,5 @@
 import React from 'react'
-import { tripDetails,loadDriver } from '../../actions/trips'
+import { tripDetails,loadDriver,completeView } from '../../actions/trips'
 import { joinTrip } from '../../actions/join'
 import { connect } from 'react-redux'
 import '../styles/main.scss'
@@ -19,8 +19,19 @@ class TripDetails extends React.Component {
         }
     }
     onDriver = e => this.props.loadDriver(trip.driver)
+    onComplete = e => {
+        if ( this.props.id){
+            this.props.completeView(this.props.id)
+        }
+    }
     render(){
         const { trip ,user} = this.props
+        const userJoin = (
+            <button onClick={this.onClick}>Join as a rider</button>
+        )
+        const driverUpdate = (
+            <button onClick={this.onComplete}>Completed</button>
+        )
         return(
             <section id="tripd">
                 <div className="container">
@@ -34,8 +45,9 @@ class TripDetails extends React.Component {
                 <p>From:{trip && trip.pick_up_address}</p>
                 <p>To:{trip.drop_off_address}</p>
                 <p>Cost:{trip.price}</p>
+                {/* { trip.rider.length === trip.capacity} */}
                 {/* <p>{trip.driver}</p> */}
-                <button onClick={this.onClick}>Join as a rider</button>
+                { user && user.is_rider ? userJoin : driverUpdate}
                 </div>
                 </div>
             </section>
@@ -47,4 +59,4 @@ const mapStateToProps = (state,ownProps) => ({
     trip:state.trips.trip,
     user:state.auth.user
 })
-export default connect(mapStateToProps,{tripDetails,joinTrip,loadDriver}) (TripDetails)
+export default connect(mapStateToProps,{tripDetails,joinTrip,loadDriver,completeView}) (TripDetails)

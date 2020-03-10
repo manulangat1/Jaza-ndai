@@ -70,6 +70,10 @@ class TripSerializer(serializers.ModelSerializer):
             'geo_location_long',
             'to_point',
             'take_off_time',
+            'drop_lat',
+            'drop_lng',
+            'take_off',
+            'take_off_date'
         )
         read_only_fields = ('id','created','updated',)
     # def get_driver(self,obj):

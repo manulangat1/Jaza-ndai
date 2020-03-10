@@ -57,10 +57,14 @@ class Trip(models.Model):
     geo_location_lat = models.CharField(max_length=100,null=True,blank=True)
     geo_location_long = models.CharField(max_length=100,null=True,blank=True)
     to_point = models.PointField(srid=4326,null=True,blank=True)
+    drop_lat = models.CharField(max_length=100,null=True,blank=True)
+    drop_lng = models.CharField(max_length=100,null=True,blank=True)
     # geo_objects = GeoManager()
     kms = models.PositiveIntegerField(default=0)
     price = models.PositiveIntegerField(default=0)
     take_off_time = models.DateTimeField(blank=True,null=True)
+    take_off = models.TimeField(blank=True,null=True)
+    take_off_date = models.DateField(blank=True,null=True)
     # time_zone = TimeZoneField(default='UTC',blank=True,null=True)
     def get_price(self):
         p = self.kms * 58

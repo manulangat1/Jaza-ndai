@@ -20,10 +20,25 @@ from pprint import pprint
 # from rest_framework import filters
 from django.http import HttpResponse
 from django_filters import FilterSet
+from time import time
+from datetime import date,time,datetime
 from django_filters.rest_framework import DjangoFilterBackend,filters
 client = Client(settings.TWILIO_ACCOUNT_SID,settings.TWILIO_AUTH_TOKEN)
 key = "fbef4f421fde4fbfbb85ba15cc7ad502"
 # Create your generics here.)
+def checkTime(request):
+    print(date.today())
+    # for i in Trip.objects.filter(status="REQUESTED").all():
+    #     print(i)
+    #     if i.status == "REQUESTED":
+    #         print(date.today())
+    #         now = datetime.time(datetime.now()).strftime("%X")
+    #         if i .take_off_time == now:
+    #             print("Take off")
+    #         else:
+    #             print("Dont Take off")
+        # print(time.time())
+    return HttpResponse({" Time updated"})
 class TripView(generics.ListCreateAPIView):
     permission_classes = [
         permissions.IsAuthenticated,
@@ -63,6 +78,8 @@ class TripView(generics.ListCreateAPIView):
             print (results)
             lat = float(results[0]['geometry']['lat'])
             lng = float(results[0]['geometry']['lng'])
+            drop_lat = lat
+            drop_lng = lng
             print (lat, lng)
             drop_point = Point(lng, lat)
             print(drop_point)
@@ -71,11 +88,14 @@ class TripView(generics.ListCreateAPIView):
             print(distance_in_km)
             p1 = int(distance_in_km) * 4 
             serializer.save(kms=distance_in_km,
-                price=p1,driver=self.request.user,
+                price=p1,
+                driver=self.request.user,
                 geo_location=location_point,
                 geo_location_lat=lat,
                 geo_location_long=lng,
-                to_point=drop_point
+                to_point=drop_point,
+                drop_lat= drop_lat,
+                drop_lng= drop_lng
             )
         else:
             return Response({"You dont have permissions to add"})
@@ -210,3 +230,19 @@ class TripDriver(generics.ListAPIView):
         return user
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('username',)
+class TransitView(generics.ListAPIView):
+    serializer_class = TripSerializer
+    def get_queryset(self):
+        # if self.request.user in rider
+        # trip = Trip.objects.get(id)
+        # print(trip)
+        x = Trip.objects.filter(status="REQUESTED",rider=self.request.user ).all()
+        print(x)
+        return  x
+class CompletedView(generics.RetrieveUpdateAPIView):
+    serializer_class = TripSerializer
+    queryset = Trip.objects.all()
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.status = "COMPLETED"
+        return Response({"Update Successfully"})

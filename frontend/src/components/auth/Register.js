@@ -2,6 +2,7 @@ import React from 'react'
 import { Link,Redirect } from 'react-router-dom'
 import { register } from '../../actions/auth'
 import { connect } from 'react-redux'
+import '../styles/main.scss'
 class Register extends React.Component {
     constructor(props) {
         super(props);
@@ -35,32 +36,34 @@ class Register extends React.Component {
         }
         const {username,email,password,password2,tel_no} = this.state
         return(
-            <div>
+            <section id="register">
+            <div className="container">
                 <form onSubmit={this.onSubmit}>
                     <div>
                         <label>Username</label>
-                        <input type="text" value={username} onChange={this.onChange} name="username"  />
+                        <input type="text" value={username} className="form-control" onChange={this.onChange} name="username"  />
                     </div>
                     <div>
                         <label>Email</label>
-                        <input type="email" value={email} onChange={this.onChange} name="email"  />
+                        <input type="email" value={email} className="form-control" onChange={this.onChange} name="email"  />
                     </div>
                     <div>
                         <label>Password</label>
-                        <input type="password" value={password} onChange={this.onChange} name="password"  />
+                        <input type="password" className="form-control" value={password} onChange={this.onChange} name="password"  />
                     </div>
                     <div>
                         <label>Password2</label>
-                        <input type="password" value={password2} onChange={this.onChange} name="password2"  />
+                        <input type="password" className="form-control" value={password2} onChange={this.onChange} name="password2"  />
                     </div>
                     <div>
                         <label>Tel no</label>
-                        <input type="tel" value={tel_no} onChange={this.onChange} name="tel_no"  />
+                        <input type="tel" className="form-control" value={tel_no} onChange={this.onChange} name="tel_no"  />
                     </div>
-                    <button>Sign Up </button>
+                    <button className="primary-btn">Sign Up </button>
                     <Link to="/login">Login</Link>
                 </form>
             </div>
+            </section>
         )
     }
 }

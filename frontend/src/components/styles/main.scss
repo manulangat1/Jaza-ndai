@@ -114,7 +114,7 @@ header{
     background-color: #ff7b39;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
+    z-index: 100001;
   }
   
   /* Links inside the dropdown */
@@ -123,6 +123,7 @@ header{
     padding: 12px 16px;
     text-decoration: none;
     display: block;
+    z-index: 100001;
   }
   
   /* Change color of dropdown links on hover */
@@ -234,6 +235,54 @@ header{
         grid-template-columns: repeat(2,1fr);
         grid-gap: 1rem;
     }
+}
+.form-inline {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+  }
+  
+  /* Add some margins for each label */
+  .form-inline label {
+    margin: 5px 10px 5px 0;
+  }
+  
+  /* Style the input fields */
+  .form-inline input {
+    vertical-align: middle;
+    margin: 5px 10px 5px 0;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+  }
+  
+  /* Style the submit button */
+  .form-inline button {
+    padding: 10px 20px;
+    background-color: dodgerblue;
+    border: 1px solid #ddd;
+    color: white;
+  }
+  
+  .form-inline button:hover {
+    background-color: royalblue;
+  }
+#add{
+    padding: 2rem;
+    .classForm{
+        width: 80%;
+        margin: auto;
+    }
+}
+#register{
+    padding:1rem;
+    .primary-btn{
+        width: 30%;
+    }
+}
+#help{
+    padding: 2rem;
+    margin-top: 4rem;
 }
 footer{
     padding:2rem;
