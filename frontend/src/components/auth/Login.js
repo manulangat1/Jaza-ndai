@@ -14,10 +14,20 @@ class Login extends React.Component{
             e.preventDefault()
             const {username,password} = this.state
             this.props.login(username,password)
+            this.setState({
+                username:"",
+                password:""
+            })
         }
     render(){
         if(this.props.isAuthenticated){
-            return <Redirect to="/" />
+            if (this.props.user.is_rider){
+                return <Redirect to="/" />
+            }
+            else{
+                return <Redirect to="/add" />
+            }
+            
         }
         const {username,password} = this.state
         return(
@@ -31,11 +41,11 @@ class Login extends React.Component{
                 <form onSubmit={this.onSubmit}>
                     <div>
                         <label>Username</label>
-                        <input type="text" value={username} onChange={this.onChange} name="username" className="form-control"  />
+                        <input type="text" minLength="8" placeholder="Enter a valid username" required value={username} onChange={this.onChange} name="username" className="form-control"  />
                     </div>
                     <div>
                         <label>Password</label>
-                        <input type="password" value={password} onChange={this.onChange} name="password" className="form-control"  />
+                        <input type="password" minLength="8" placeholder="Ennter your password here" required value={password} onChange={this.onChange} name="password" className="form-control"  />
                     </div>
                     <button className="primary-btn">Log in </button>
                 </form>
@@ -56,6 +66,7 @@ class Login extends React.Component{
     }
 }
 const mapStateToProps = state => ({
-    isAuthenticated:state.auth.isAuthenticated
+    isAuthenticated:state.auth.isAuthenticated,
+    user:state.auth.user
 })
 export default connect(mapStateToProps,{login})(Login)

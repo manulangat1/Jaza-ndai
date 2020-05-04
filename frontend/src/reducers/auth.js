@@ -14,6 +14,7 @@ export default function(state=initialState,action){
     switch(action.type){
         case LOGIN_SUCCESS:
         case REGISTER_SUCCESS:
+        case REGISTER_RIDER:
             localStorage.setItem('token',action.payload.token)
             return{
                 ...state,

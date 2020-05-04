@@ -93,7 +93,7 @@ export const loadDriver = username => (dispatch,getState) => {
         .catch(err => console.log(err))
 }
 export const completeView = id => (dispatch,getState) => {
-    axios.put(`/api/transit/complete/${id}`,tokenConfig(getState))
+    axios.put(`/api/transit/complete/${id}/`,tokenConfig(getState))
         .then(res => {
             dispatch({
                 type:COMPLETE_TRIP,

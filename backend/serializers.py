@@ -25,12 +25,31 @@ class RegisterSerilizer(serializers.ModelSerializer):
             'id',
             'username',
             'email',
-            'password'
+            'password',
+            'is_driver'
         )
         extra_kwargs={'password':{'write_only':True}}
     def create(self, validated_data):
         # return super().create(validated_data)
-        user = User.objects.create_user(validated_data['username'],validated_data['email'],validated_data['password'])
+        t = True
+        user = User.objects.create_user(validated_data['username'],validated_data['email'],validated_data['password'],is_driver=t)
+        return user
+#register rider serializer 
+class RegisterRiderSerilizer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            'id',
+            'username',
+            'email',
+            'password',
+            'is_rider'
+        )
+        extra_kwargs={'password':{'write_only':True}}
+    def create(self, validated_data):
+        # return super().create(validated_data)
+        t = True
+        user = User.objects.create_user(validated_data['username'],validated_data['email'],validated_data['password'],is_rider=t)
         return user
 # user serializer
 class UserSerilizer(serializers.ModelSerializer):

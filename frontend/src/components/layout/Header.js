@@ -19,8 +19,8 @@ class Header extends React.Component {
         const { isAuthenticated,user} = this.props.auth
         const driverLinks = (
             <ul>
-                <li><Link to="/" onClick={this.handleModalOpen}>Home
-                    </Link></li>
+                {/* <li><Link to="/" onClick={this.handleModalOpen}>Home
+                    </Link></li> */}
                     <li><Link to="/add">Add </Link></li>
                     <li><Link to="/transit">Transit </Link></li>
                     <li>
@@ -30,7 +30,7 @@ class Header extends React.Component {
                         {/* <a href="#">Link 1</a>  
                           */}
                         <Link to="/profile">Profile </Link>
-                        <a><button onClick= {this.props.logout}><i class="fas fa-sign-out-alt"> Log out</i></button></a>
+                        <a><button onClick= {this.props.logout} className="primary-btn"><i class="fas fa-sign-out-alt"> Log out</i></button></a>
                     </div>
                     </div>
                     </li>
@@ -48,7 +48,7 @@ class Header extends React.Component {
                         {/* <a href="#">Link 1</a>  
                           */}
                         <Link to="/profile">Profile </Link>
-                        <a><button onClick= {this.props.logout}><i class="fas fa-sign-out-alt"> Log out</i></button></a>
+                        <a><button onClick= {this.props.logout} className="primary-btn"><i class="fas fa-sign-out-alt"> Log out</i></button></a>
                     </div>
                     </div>
                     </li>
@@ -63,6 +63,7 @@ class Header extends React.Component {
             <ul>
                     <li><Link to="/login">Login</Link></li>
                     <li><Link to="/register">Register</Link></li>
+                    <li><Link to="/admin">Register</Link></li>
                 </ul>
         )
         return(

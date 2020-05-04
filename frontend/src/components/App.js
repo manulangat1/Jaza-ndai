@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component , lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom';
 // store
 import store from '../store'
@@ -22,6 +22,11 @@ import P from './common/P'
 import './styles/main.scss'
 import Help from './layout/Help'
 import Transit from './Trips/Transit'
+import Call from './Call'
+import  Register_Rider from './auth/Register_Rider'
+import About from './layout/About'
+import Contact from './layout/Contact'
+// const   AddTrip = lazy(() => import('./Trips/AddTrip')) 
 class App extends React.Component {
 componentDidMount(){
     store.dispatch(loadUser())
@@ -32,12 +37,17 @@ render() {
         <Router>
             {/* <main className="map"> */}
                 <Header />
+                <Suspense fallback={<div>Loading...</div>}>
                     <Switch>
                         <section id="app">
                         <PrivateRoute exact path="/" component={All} />
                         <Route exact path="/login" component={Login} />
-                        <Route exact path="/help" component="Help" />
+                        <Route exact path="/call" component={Call} />
+                        <Route exact path="/help" component={Help} />
+                        <Route exact path="/about" component={About}/>
+                        <Route exact path="/contact" component={Contact} />
                         <Route exact path="/register" component={Register} />
+                        <Route exact path="/register/rider" component={Register_Rider} />
                         <PrivateRoute exact path="/add" component={AddTrip} />
                         <PrivateRoute exact path="/trip/:id" component={TripDetails} />
                         <PrivateRoute exact path="/history" component={History} />
@@ -45,6 +55,7 @@ render() {
                         <PrivateRoute exact path="/transit" component={Transit} />
                         </section>
                     </Switch>
+                </Suspense>
                 <Footer />
             {/* </main> */}
        </Router>

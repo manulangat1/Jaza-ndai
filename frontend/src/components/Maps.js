@@ -20,7 +20,8 @@ class Maps extends React.Component{
                     attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
                     />
                     { trips && trips.map(trip => (
-                        <Marker
+                        <div>
+                        {/* <Marker
                         key={trip.id}
                         position={[trip.geo_location_lat, trip.geo_location_long]}
                     >
@@ -28,7 +29,17 @@ class Maps extends React.Component{
                             <p>{trip.price}</p>
                             <Link to={`trip/${trip.id}`}>Book ride</Link>
                             </Popup>
+                        </Marker> */}
+                        <Marker
+                        key={trip.id}
+                        position={[trip.drop_lat,trip.drop_lng]}
+                    >
+                        <Popup>
+                            <p>Price:{trip.price}</p>
+                            <Link to={`trip/${trip.id}`}>Book ride</Link>
+                            </Popup>
                         </Marker>
+                        </div>
                     ))}
             </Map>
     </section>

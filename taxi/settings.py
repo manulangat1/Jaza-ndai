@@ -32,7 +32,10 @@ INSTALLED_APPS = [
     'knox',
     'channels',
     'django.contrib.gis',
-    'django_filters'
+    'django_filters',
+    'import_export',
+    'django_archive',
+    'dbbackup'
 ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ( 'knox.auth.TokenAuthentication',),
@@ -108,7 +111,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Nairobi'
 
 USE_I18N = True
 
@@ -131,10 +134,10 @@ AUTH_USER_MODEL = 'backend.User'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-TWILIO_ACCOUNT_SID = "ACc8e3a5361026364333bcd339433f54f9"
-TWILIO_AUTH_TOKEN = "7fe88c5e0fe9ce0c7e8bc83128496abf"
-TWILIO_NUMBER = "+1 207 477 7406"
+from decouple import config
+TWILIO_ACCOUNT_SID = config("TWILIO_ACCOUNT_SID")
+TWILIO_AUTH_TOKEN =  config("TWILIO_AUTH_TOKEN")
+TWILIO_NUMBER =  config("TWILIO_NUMBER")
 
 DRAMATIQ_BROKER = {
     "BROKER": "dramatiq.brokers.redis.RedisBroker",
@@ -151,3 +154,14 @@ DRAMATIQ_BROKER = {
         "django_dramatiq.middleware.DbConnectionsMiddleware",
     ]
 }
+CELERY_BROKER_URL = 'amqp://localhost'
+IMPORT_EXPORT_USE_TRANSACTIONS = True
+DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DBBACKUP_STORAGE_OPTIONS = {'location': '/media'}
+# DBBACKUP_CONNECTORS = {
+#     'default': {
+#         'USER': 'manulangat',
+#         'PASSWORD': '3050manu',
+#         'HOST': 'replica-for-backup'
+#     }
+# }

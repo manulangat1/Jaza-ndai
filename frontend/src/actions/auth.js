@@ -22,10 +22,25 @@ export const register = ({username,password,email,tel_no}) => dispatch => {
         .catch(err => console.log(err))
     
 }
+export const registerRider = ({username,password,email,tel_no}) => dispatch => {
+    const config = {
+        headers:{
+            'Content-Type':'application/json'
+        }
+    }
+    const body = JSON.stringify({username,password,email,tel_no})
+    axios
+        .post('/api/register/rider/',body,config)
+        .then(res => {
+            dispatch({
+                type:REGISTER_RIDER,
+                payload:res.data
+            })
+        })
+        .catch(err => console.log(err))
+}
 export const loadUser = () => (dispatch,getState) => {
-    dispatch({type:USER_LOADING})
-
-    
+    dispatch({type:USER_LOADING})    
     axios.get('/api/user/',tokenConfig(getState))
          .then(res => {
              dispatch({

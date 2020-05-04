@@ -14,7 +14,7 @@ class Transit extends React.Component{
                     {
                         trips.map(trip => (
                             <div key={trip.id}>
-                                <h1>{trip.drop_off_address}</h1>
+                                <h1> <Link to={`trip/${trip.id}`}>To: {trip.drop_off_address}</Link></h1>
                             </div>
                         ))
                     }

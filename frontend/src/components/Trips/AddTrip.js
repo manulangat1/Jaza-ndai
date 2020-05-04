@@ -7,26 +7,33 @@ class AddTrip extends React.Component{
     state = {
         pick_up_address:'',
         drop_off_address:'',
-        status:'',
+        // status:'',
         capacity:'',
         date:''
     }
     onChange = e => this.setState({[e.target.name]:e.target.value})
     onSubmit = e => {
         e.preventDefault()
-        const {pick_up_address,drop_off_address,status,capacity,date} = this.state
+        const {pick_up_address,drop_off_address,capacity,date} = this.state
         const newTrip ={
-            pick_up_address,drop_off_address,status,capacity,date
+            pick_up_address,drop_off_address,capacity,date
         }
         this.props.AddTrips(newTrip)
         console.log('submitted')
-        this.props.history.push('/')
+        // this.props.history.push('/')
+        this.setState({
+            pick_up_address:'',
+            drop_off_address:'',
+            // status:'',
+            capacity:'',
+            date:''
+        })
     }
     render(){
         if (this.props.auth.user.is_rider){
             return <Redirect to="/" />
         }
-        const {pick_up_address,drop_off_address,status,capacity,date} = this.state
+        const {pick_up_address,drop_off_address,capacity,date} = this.state
         return (
             <section id="add">
                 <div className="container">
@@ -38,11 +45,7 @@ class AddTrip extends React.Component{
                     <div>
                         <label>drop_off_address</label>
                         <input type="text" required value={drop_off_address} className="form-control" onChange={this.onChange} name="drop_off_address"  />
-                    </div>
-                    <div>
-                        <label>status</label>
-                        <input type="text" required value={status} className="form-control" onChange={this.onChange} name="status"  />
-                    </div>
+                    </div> 
                     <div>
                         <label>Capacity</label>
                         <input type="number" required value={capacity} className="form-control" onChange={this.onChange} name="capacity"  />
@@ -52,7 +55,6 @@ class AddTrip extends React.Component{
                         <input type="time" required value={date} className="form-control" onChange={this.onChange} name="date"  />
                     </div>
                     <button className="primary-btn"> Add Trips </button>
-                    {/* <Link to="/register">Register</Link> */}
                 </form>
                 </div>
             </section>

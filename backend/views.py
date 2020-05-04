@@ -3,7 +3,7 @@ from django.contrib.gis.measure import D
 from django.contrib.gis.measure import Distance  
 from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.gis.geos import Point 
-from .serializers import TripSerializer,LoginSerializer,UserSerilizer,RegisterSerilizer,ReadOnlyTripSerializer
+from .serializers import RegisterRiderSerilizer,TripSerializer,LoginSerializer,UserSerilizer,RegisterSerilizer,ReadOnlyTripSerializer
 from .models import Trip,User
 from rest_framework import viewsets
 from rest_framework import generics,permissions
@@ -17,27 +17,22 @@ from knox.models import AuthToken
 
 from opencage.geocoder import OpenCageGeocode
 from pprint import pprint
+from twilio.jwt.client import ClientCapabilityToken
+from twilio.twiml.voice_response import VoiceResponse
+
 # from rest_framework import filters
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 from django_filters import FilterSet
-from time import time
-from datetime import date,time,datetime
+# from time import time
+import time
+from datetime import date,datetime,timedelta
 from django_filters.rest_framework import DjangoFilterBackend,filters
 client = Client(settings.TWILIO_ACCOUNT_SID,settings.TWILIO_AUTH_TOKEN)
 key = "fbef4f421fde4fbfbb85ba15cc7ad502"
 # Create your generics here.)
+from .tasks import checkTime_async
 def checkTime(request):
-    print(date.today())
-    # for i in Trip.objects.filter(status="REQUESTED").all():
-    #     print(i)
-    #     if i.status == "REQUESTED":
-    #         print(date.today())
-    #         now = datetime.time(datetime.now()).strftime("%X")
-    #         if i .take_off_time == now:
-    #             print("Take off")
-    #         else:
-    #             print("Dont Take off")
-        # print(time.time())
+    checkTime_async()
     return HttpResponse({" Time updated"})
 class TripView(generics.ListCreateAPIView):
     permission_classes = [
@@ -61,28 +56,27 @@ class TripView(generics.ListCreateAPIView):
         if user.is_driver == True:
             q = self.request.data['pick_up_address']
             z = self.request.data['drop_off_address']
+            y = self.request.data['date']
             geocoder = OpenCageGeocode(key)	
             query = f'{q}, Kenya'  	
             print(query)
             results = geocoder.geocode(query)
             print (results)
-            lat = results[0]['geometry']['lat']
-            lng = results[0]['geometry']['lng']
-            print (lat, lng)
-            location_point = Point(lng, lat)
+            lats = results[0]['geometry']['lat']
+            lngs = results[0]['geometry']['lng']
+            print (lats, lngs)
+            location_point = Point(lngs, lats)
             print(location_point)
             ######################
             query = f'{z}, Kenya'  	
             print(query)
-            results = geocoder.geocode(query)
-            print (results)
-            lat = float(results[0]['geometry']['lat'])
-            lng = float(results[0]['geometry']['lng'])
-            drop_lat = lat
-            drop_lng = lng
-            print (lat, lng)
-            drop_point = Point(lng, lat)
-            print(drop_point)
+            result = geocoder.geocode(query)
+            # print (results)
+            drop_lat = float(result[0]['geometry']['lat'])
+            drop_lng = float(result[0]['geometry']['lng'])
+            # print (lat1, lng1)
+            drop_point = Point(drop_lng, drop_lat)
+            # print(drop_point)
             distance = location_point.distance(drop_point)
             distance_in_km = distance * 100
             print(distance_in_km)
@@ -91,11 +85,13 @@ class TripView(generics.ListCreateAPIView):
                 price=p1,
                 driver=self.request.user,
                 geo_location=location_point,
-                geo_location_lat=lat,
-                geo_location_long=lng,
+                geo_location_lat=lats,
+                geo_location_long=lngs,
                 to_point=drop_point,
                 drop_lat= drop_lat,
-                drop_lng= drop_lng
+                drop_lng= drop_lng,
+                take_off_date = date.today(),
+                take_off = y
             )
         else:
             return Response({"You dont have permissions to add"})
@@ -142,6 +138,17 @@ class JoinTripView(generics.RetrieveUpdateAPIView):
             print(instance.rider.count())
             return Response({"Added successfully"})
         return Response({"updated successfully"})
+class RegisterRiderAPI(generics.GenericAPIView):
+    serializer_class = RegisterRiderSerilizer
+
+    def post(self,request,*args,**kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        return Response({
+            "user": UserSerilizer(user,context=self.get_serializer_context()).data,
+            "token":AuthToken.objects.create(user)[1]
+        })
 class RegisterAPI(generics.GenericAPIView):
     serializer_class = RegisterSerilizer
 
@@ -164,14 +171,17 @@ class LoginAPI(generics.GenericAPIView):
             "user": UserSerilizer(user,context=self.get_serializer_context()).data,
             "token":AuthToken.objects.create(user)[1]
         })
-class UserAPI(generics.RetrieveAPIView):
+class UserAPI(generics.RetrieveUpdateAPIView):
     permission_classes = [
         permissions.IsAuthenticated,
     ]
     serializer_class = UserSerilizer
     def get_object(self):
         return self.request.user
-
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        print(instance)
+        return Response({"Added successfully"})
 
 def maps(request):
     trips = []
@@ -219,7 +229,8 @@ class TripSearchView(generics.ListAPIView):
     filter_backends = (DjangoFilterBackend,)
     serializer_class = TripSerializer
     def get_queryset(self):
-        return Trip.objects.all()
+        current = datetime.now().time().strftime("%H:%M:%S")
+        return Trip.objects.filter(status="REQUESTED",take_off_date=date.today()).all()
     filter_fields = ('pick_up_address','drop_off_address',)
     # filter_class = TripFilter
 class TripDriver(generics.ListAPIView):
@@ -233,16 +244,55 @@ class TripDriver(generics.ListAPIView):
 class TransitView(generics.ListAPIView):
     serializer_class = TripSerializer
     def get_queryset(self):
-        # if self.request.user in rider
-        # trip = Trip.objects.get(id)
-        # print(trip)
-        x = Trip.objects.filter(status="REQUESTED",rider=self.request.user ).all()
-        print(x)
-        return  x
+        # print(self.request.user)
+        user = User.objects.filter(username=self.request.user).first()
+        print(user)
+        if user.is_rider:
+            x = Trip.objects.filter(status="REQUESTED",rider=user ).all()
+            return x
+        else:
+            y = Trip.objects.filter(status="REQUESTED",driver=user).all()
+            print(y)
+            print("not auth")
+            return y
+        # return  x
 class CompletedView(generics.RetrieveUpdateAPIView):
     serializer_class = TripSerializer
     queryset = Trip.objects.all()
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.status = "COMPLETED"
+        instance.save()
         return Response({"Update Successfully"})
+from .resources import PersonResource,TripResource,DriverResource,TripResource
+def reps(request):
+    person_resource = TripResource()
+    dataset = person_resource.export()
+    response = HttpResponse(dataset.csv, content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="persons.csv"'
+    return response
+
+def get_token(request):
+    """Returns a Twilio Client token"""
+    # Create a TwilioCapability token with our Twilio API credentials
+    capability = ClientCapabilityToken(
+        settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN
+    )
+
+    # Allow our users to make outgoing calls with Twilio Client
+    capability.allow_client_outgoing(settings.TWILIO_ACCOUNT_SID)
+
+    # If the user is on the support dashboard page, we allow them to accept
+    # incoming calls to "support_agent"
+    # (in a real app we would also require the user to be authenticated)
+    # if request.GET['forPage'] == reverse('dashboard'):
+    capability.allow_client_incoming('support_agent')
+    # else:
+        # Otherwise we give them a name of "customer"
+        # capability.allow_client_incoming('customer')
+
+    # Generate the capability token
+    token = capability.to_jwt()
+
+    return JsonResponse({'token': token.decode('utf-8')})
+

@@ -11,10 +11,10 @@ class Profile extends React.Component{
             <section id="profile">
                 <div className="container">
                 <img src={user.pic} alt="user image" />
-                    <div>
-                    <h1>{user.username}</h1>
+                    <div className="profile-d">
+                    <h1>Your username:{user.username}</h1>
                     <p>{user.is_driver}</p>
-                    <p>{user.tel_no}</p>
+                    <p>Your Phone number: {user.tel_no}</p>
                     <Link to="/history"  className="secondary-btn" >View all your rides</Link>
                     </div>
                 </div>

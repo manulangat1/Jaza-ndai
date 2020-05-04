@@ -3,6 +3,7 @@ import Modal from 'react-responsive-modal';
 import { Redirect,withRouter } from 'react-router-dom'
 import { getTrips,searchTrips } from '../../actions/trips'
 import { connect } from 'react-redux'
+import '../styles/main.scss';
 class LoginModal extends React.Component{
   state = {
     pick_up_address:'',
@@ -16,6 +17,9 @@ class LoginModal extends React.Component{
       e.preventDefault()
       // console.log("submitted")
       const {pick_up_address,drop_off_address } = this.state
+      if (pick_up_address == '') {
+        console.log("required")
+      }
       // console.log(pick_up_address,drop_off_address)
       this.props.searchTrips(pick_up_address,drop_off_address)
       // this.props.history.push('/')
@@ -23,17 +27,19 @@ class LoginModal extends React.Component{
   }
   render(){
     return(
-      <section>
+      <section id="modal">
         <Modal open={this.props.modalOpen} onClose={this.props.handleModalOpen}>
                 <div className="container">
                          <form onSubmit={this.onSubmit} className="form-inline">
                          <div>
-                         <input type="text" value={this.state.pick_up_address} onChange={this.onChange} name="pick_up_address" className="form-control"  />
+                        <label>Pick up point ?</label>
+                         <input type="text" required value={this.state.pick_up_address} onChange={this.onChange} name="pick_up_address" className="form-control"  />
                          </div>
                          <div>
-                         <input type="text" value={this.state.drop_off_address} onChange={this.onChange} name="drop_off_address"  className="form-control" />
+                         <label>Drop off Point?</label>
+                         <input type="text"  required value={this.state.drop_off_address} onChange={this.onChange} name="drop_off_address"  className="form-control" />
                          </div>
-                         <button onClick={this.props.handleModalOpen}>Submit</button>
+                         <button className="primary-btn" onClick={this.props.handleModalOpen}>Submit</button>
                          </form>
                          </div>
            </Modal>
