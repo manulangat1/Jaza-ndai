@@ -3,6 +3,7 @@ import { tripDetails,loadDriver,completeView } from '../../actions/trips'
 import { joinTrip } from '../../actions/join'
 import { connect } from 'react-redux'
 import '../styles/main.scss'
+{/* <a target="_blank" href="http://127.0.0.1:5000/call"  >Call the driver</a> */}
 class TripDetails extends React.PureComponent {
     componentDidMount(){
         if (this.props.id){
@@ -33,8 +34,7 @@ class TripDetails extends React.PureComponent {
             <button className="primary-btn" onClick={this.onClick}>Join as a rider</button>
         )
         const btnJoin = (
-        //    trip && trip.rider.length === trip.capacity ? "Car is full" : userJoin
-            <button className="primary-btn" onClick={this.onClick}>Join as a rider</button>
+            <button className="primary-btn" onClick={this.onClick}>Join as a rider and call driver </button>
         )
         const driverUpdate = (
             <button className="primary-btn" onClick={this.onComplete}>Completed</button>
@@ -53,6 +53,7 @@ class TripDetails extends React.PureComponent {
                 <p>From:{trip && trip.pick_up_address}</p>
                 <p>To:{trip.drop_off_address}</p>
                 <p>Cost:{trip.price}</p>
+                <p>Capacity: {trip.capacity}</p>
                 {/* { user && user.rider  ?   (user.rider == true && trip.rider.length === trip.capacity ? "Car is full" : btnJoin) : "" } */}
                 {/* { user.rider == true && trip.rider.length === trip.capacity ? "Car is full" : btnJoin} */}
                 { user && user.is_rider ? "" : driverUpdate }

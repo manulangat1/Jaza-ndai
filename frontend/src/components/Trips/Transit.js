@@ -9,7 +9,7 @@ class Transit extends React.Component{
     render(){
         const { trips } = this.props
         return(
-            <section>
+            <section id="tri">
                 <div className="container">
                     {
                         trips.map(trip => (

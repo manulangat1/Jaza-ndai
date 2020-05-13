@@ -14,12 +14,12 @@ from django.conf import settings
 from twilio.rest import Client
 
 from knox.models import AuthToken
-
+import requests
 from opencage.geocoder import OpenCageGeocode
 from pprint import pprint
 from twilio.jwt.client import ClientCapabilityToken
 from twilio.twiml.voice_response import VoiceResponse
-
+from .blocks.fl import load_into_db
 # from rest_framework import filters
 from django.http import HttpResponse,JsonResponse
 from django_filters import FilterSet
@@ -135,7 +135,9 @@ class JoinTripView(generics.RetrieveUpdateAPIView):
                 to=user.tel_no,
                 from_=settings.TWILIO_NUMBER,
             )
+            # calls(instance.driver.tel_no)
             print(instance.rider.count())
+            r = requests.get('http://127.0.0.1:5000/call')
             return Response({"Added successfully"})
         return Response({"updated successfully"})
 class RegisterRiderAPI(generics.GenericAPIView):
@@ -270,6 +272,7 @@ def reps(request):
     dataset = person_resource.export()
     response = HttpResponse(dataset.csv, content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="persons.csv"'
+    load_into_db()
     return response
 
 def get_token(request):
@@ -279,20 +282,38 @@ def get_token(request):
         settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN
     )
 
-    # Allow our users to make outgoing calls with Twilio Client
     capability.allow_client_outgoing(settings.TWILIO_ACCOUNT_SID)
-
-    # If the user is on the support dashboard page, we allow them to accept
-    # incoming calls to "support_agent"
-    # (in a real app we would also require the user to be authenticated)
-    # if request.GET['forPage'] == reverse('dashboard'):
     capability.allow_client_incoming('support_agent')
-    # else:
-        # Otherwise we give them a name of "customer"
-        # capability.allow_client_incoming('customer')
-
-    # Generate the capability token
     token = capability.to_jwt()
 
     return JsonResponse({'token': token.decode('utf-8')})
+from twilio.twiml.voice_response import VoiceResponse
+from twilio.rest import Client
+from django.urls import reverse
+from django.http import HttpResponse
+def outbound(driver_no):
+    response = VoiceResponse()
 
+    response.say("Thank you for contacting our sales department. If this "
+                 "click to call application was in production, we would "
+                 "dial out to your sales team with the Dial verb.",
+                 voice='alice')
+    response.number(driver_no)
+    return str(response)
+def calls(phone_number):
+    twilio_client = Client(settings.TWILIO_ACCOUNT_SID,settings.TWILIO_AUTH_TOKEN)
+    twilio_client.calls.create(from_=settings.TWILIO_NUMBER,
+                                   to=phone_number,url=outbound)
+
+# from brownie.network import rpc, web3,accounts
+# from brownie import network
+# from brownie import *
+# from brownie.types import ConfigDict
+
+def payment(request):
+    r = requests.get('http://127.0.0.1:5000/blockNumber')
+    print(r.status_code)
+    print(r.text)
+    print()
+    print(r.json())
+    return HttpResponse(r.json())

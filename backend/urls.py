@@ -5,6 +5,7 @@ urlpatterns = [
     
     path('api/auth',include('knox.urls')),
     path('d/',views.reps),
+    path('payment/',views.payment),
     path('call/',views.get_token),
     path('map/',views.maps),
     path('time/',views.checkTime),

@@ -63,7 +63,7 @@ class Header extends React.Component {
             <ul>
                     <li><Link to="/login">Login</Link></li>
                     <li><Link to="/register">Register</Link></li>
-                    <li><Link to="/admin">Register</Link></li>
+                    <li><a href="http://127.0.0.1:8000/admin/login/?next=/admin/" target="_blank">Admin</a></li>
                 </ul>
         )
         return(

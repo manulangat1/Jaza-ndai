@@ -26,11 +26,13 @@ import Call from './Call'
 import  Register_Rider from './auth/Register_Rider'
 import About from './layout/About'
 import Contact from './layout/Contact'
+import Block from './Trips/Block'
 // const   AddTrip = lazy(() => import('./Trips/AddTrip')) 
 class App extends React.Component {
-componentDidMount(){
-    store.dispatch(loadUser())
-}
+      componentDidMount(){
+        store.dispatch(loadUser())
+      }
+
 render() {
    return (
        <Provider store={store}>
@@ -42,6 +44,7 @@ render() {
                         <section id="app">
                         <PrivateRoute exact path="/" component={All} />
                         <Route exact path="/login" component={Login} />
+                        <Route exact path="/block" component={Block} />
                         <Route exact path="/call" component={Call} />
                         <Route exact path="/help" component={Help} />
                         <Route exact path="/about" component={About}/>

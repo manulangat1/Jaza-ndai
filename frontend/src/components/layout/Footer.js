@@ -6,7 +6,7 @@ class Footer extends React.Component {
         const tods = date.getFullYear()
         return(
             <footer>
-                <p><span className="f">@&;@{tods}</span></p>
+                <p><span className="f">{tods}</span></p>
                 <p><Link to="/help">Help</Link> |  <Link to="/about">About us</Link>  |  <Link to="/contact">Contact Us</Link></p>
                 <p><i class="fab fa-facebook"></i>  | <i class="fab fa-twitter-square"></i> </p>
             </footer>
