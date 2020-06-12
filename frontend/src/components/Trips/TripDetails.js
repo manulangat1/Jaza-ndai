@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import '../styles/main.scss'
 {/* <a target="_blank" href="http://127.0.0.1:5000/call"  >Call the driver</a> */}
 class TripDetails extends React.PureComponent {
+
     componentDidMount(){
         if (this.props.id){
             this.props.tripDetails(this.props.id)
@@ -44,8 +45,15 @@ class TripDetails extends React.PureComponent {
             <section id="tripd">
                 <div className="container">
                 <div className="image">
-                    <p onClick={this.OnDriver}>{trip && trip.driver} </p>
-                    {/* <p>{trip && trip.driver.phone_no}</p> */}
+                <h1>Driver details</h1>
+                {
+                        trip && trip.driver ?  Object.entries(trip.driver).map(([key,value],i) => (
+                            <div>
+                                {/* <p>{key}:{value}</p> */}
+                        { key && key == "pic" ? <img src={value} alt="user image" />: key == "username" ? <p>{key}:{value}</p>: key == "tel_no" ? <p>{key}:{value}</p> :""}
+                            </div>
+                        ))  : null
+                    }
                 </div>
                 <div className="l">
                 <p>Username:{user.username}</p>
@@ -54,10 +62,8 @@ class TripDetails extends React.PureComponent {
                 <p>To:{trip.drop_off_address}</p>
                 <p>Cost:{trip.price}</p>
                 <p>Capacity: {trip.capacity}</p>
-                {/* { user && user.rider  ?   (user.rider == true && trip.rider.length === trip.capacity ? "Car is full" : btnJoin) : "" } */}
-                {/* { user.rider == true && trip.rider.length === trip.capacity ? "Car is full" : btnJoin} */}
                 { user && user.is_rider ? "" : driverUpdate }
-                { user && user.is_rider ? btnJoin:""}
+                { user && user.is_rider  ? btnJoin:""}
                 </div>
                 </div>
             </section>

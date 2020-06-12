@@ -7,7 +7,9 @@ class History extends React.Component{
     state = {
         isClicked:false,
         modalOpen: false,
-        showing: false
+        showing: false,
+        messageVisibility: true
+
     }
     componentDidMount(){
         if(this.props.auth.is_driver){
@@ -16,9 +18,22 @@ class History extends React.Component{
             this.props.getRider()
         }
     }
-    // onChange = e => {
-    //     this.setState({showing:!showing})
-    // }
+    onChange = id => {
+        // this.setState({showing:!this.state.showing})
+        console.log(id)
+            // this.setState({ showing: id }, () => { 
+            //   console.log(id)
+            //   console.log(this.state.showing) })
+            //   this.setState({showing:!this.state.showing})
+        const {showing} = this.state
+            this.setState({
+                showing: {
+                  ...showing,
+                  [id]: !showing[id]
+                }
+            })
+          
+    }
     render(){
         const { trips } = this.props
         const { showing } = this.state
@@ -27,12 +42,12 @@ class History extends React.Component{
                 <div className="container">
                     <div className="hist">
                     {
-                        trips.map(trip => (
+                     trips && trips.length > 0 ?   trips.map(trip => (
                             <div key={trip.id}>
                                 <h1>From : {trip.pick_up_address}  | To:{trip.drop_off_address}</h1>
                                 <div>
-                    <button className="primary-btn" onClick={() => this.setState({ showing: !showing })}>View more Details</button>
-                    { showing 
+                    {this.state.showing[trip.id] ? <button className="primary-btn" onClick={() => this.onChange(trip.id)}>View less Details</button> : <button className="primary-btn" onClick={() => this.onChange(trip.id)}>View more Details</button>}
+                    { this.state.showing[trip.id]
                         ? <div>
                             {/* <h2>Driver:{trip.driver.username}</h2> */}
                             <p>Capacity: {trip.capacity }</p>
@@ -45,7 +60,7 @@ class History extends React.Component{
                     }
                     </div>  
                             </div>
-                        ))
+                        )) : "You have not used our services before book a ride to start"
                     }
                     </div>
                 </div>

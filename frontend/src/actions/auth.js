@@ -4,15 +4,23 @@ import {LOGOUT_SUCCESS,USER_LOADED,
     LOGIN_SUCCESS } from './types'
 import axios from 'axios'
 
-export const register = ({username,password,email,tel_no}) => dispatch => {
+export const register = ({username,password,email,tel_no,pic}) => dispatch => {
     const config = {
         headers:{
-            'Content-Type':'application/json'
+            'Content-Type':'multipart/form-data'
         }
     }
-    const  body = JSON.stringify({username,password,email,tel_no})
+    // const  body = JSON.stringify({username,password,email,tel_no,pic})
+    const  body = {username,password,email,tel_no,pic}
+    const data = new FormData() 
+    data.append('username', username)
+    data.append('password', password)
+    data.append('email', email)
+    data.append('tel_no', tel_no)
+    data.append('pic', pic)
+    console.log(data)
     axios
-        .post('/api/register/',body,config)
+        .post('/api/register/',data,config)
         .then(res => {
             dispatch({
                 type:REGISTER_SUCCESS,
@@ -22,15 +30,22 @@ export const register = ({username,password,email,tel_no}) => dispatch => {
         .catch(err => console.log(err))
     
 }
-export const registerRider = ({username,password,email,tel_no}) => dispatch => {
+export const registerRider = ({username,password,email,tel_no,pic}) => dispatch => {
     const config = {
         headers:{
-            'Content-Type':'application/json'
+            'Content-Type':'multipart/form-data'
         }
     }
-    const body = JSON.stringify({username,password,email,tel_no})
+    // const body = JSON.stringify({username,password,email,tel_no})
+    const data = new FormData() 
+    data.append('username', username)
+    data.append('password', password)
+    data.append('email', email)
+    data.append('tel_no', tel_no)
+    data.append('pic', pic)
+    console.log(data)
     axios
-        .post('/api/register/rider/',body,config)
+        .post('/api/register/rider/',data,config)
         .then(res => {
             dispatch({
                 type:REGISTER_RIDER,

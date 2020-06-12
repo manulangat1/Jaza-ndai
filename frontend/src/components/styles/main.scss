@@ -18,6 +18,11 @@ h1,h2,h3,h4,h5,h6{
 a{
     text-decoration: none;
 }
+img{
+    border-radius:4px;
+    max-height:200px;
+    max-width:250px;
+}
 ul{
     list-style-type: none;
     float: right;
@@ -234,10 +239,21 @@ header{
     p{
         margin-bottom: 0.5rem;
     }
+    .image{
+        h1{
+            color: yellowgreen;
+            text-align: center;
+            font-size: 2rem;
+        }
+        p{
+            color:green;
+            font-size:1.7rem;
+        }
+    }
     .container{
         display: grid;
         grid-template-columns: repeat(2,1fr);
-        grid-gap: 1rem;
+        grid-gap: 2rem;
         .l{
             .primary-btn{
                 background-color: rgb(55,100,144);   

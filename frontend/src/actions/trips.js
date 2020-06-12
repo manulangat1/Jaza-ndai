@@ -5,7 +5,10 @@ import { GET_ALL_TRIPS,ADD_TRIP,
         SEARCH_TRIPS,
         GET_DRIVER,
         COMPLETE_TRIP,
-        GET_TRANSIT
+        GET_TRANSIT,
+        PAY,
+        PAY_TRIP,
+        RATE_DRIVER
         } from './types'
 import axios from 'axios'
 import { tokenConfig } from './auth'
@@ -80,10 +83,10 @@ export const searchTrips = (pick_up_address,drop_off_address) => (dispatch,getSt
          })
          .catch(err => console.log(err))
 }
-export const loadDriver = username => (dispatch,getState) => {
-    console.log(username)
+export const loadDriver = id => (dispatch,getState) => {
+    console.log(id)
     axios
-        .get(`api/driver/?username=${username}`,tokenConfig(getState))
+        .get(`api/driver/?id=${id}`,tokenConfig(getState))
         .then(res => {
             dispatch({
                 type:GET_DRIVER,
@@ -100,7 +103,7 @@ export const completeView = id => (dispatch,getState) => {
                 payload:res.data
             })
         })
-        .catch(err => consoel.log(error))
+        .catch(err => console.log(error))
 }
 export const transitView = () => ( dispatch,getState) => {
     axios.get("/api/transit/",tokenConfig(getState))
@@ -111,4 +114,17 @@ export const transitView = () => ( dispatch,getState) => {
             })
         })
         .catch(err => console.log(err))
+}
+export const rateDriver = (courtesy,ride)  => (dispatch,getState) =>{
+    const body = JSON.stringify({courtesy,ride})
+    console.log(body)
+    axios
+        .post('/api/review/',body,tokenConfig(getState))
+            .then(res => {
+                dispatch({
+                    type:RATE_DRIVER,
+                    payload:res.data
+                })
+            })
+            .catch(err => console.log(err))
 }

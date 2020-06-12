@@ -27,6 +27,7 @@ import  Register_Rider from './auth/Register_Rider'
 import About from './layout/About'
 import Contact from './layout/Contact'
 import Block from './Trips/Block'
+import Pay from './Trips/Pay'
 // const   AddTrip = lazy(() => import('./Trips/AddTrip')) 
 class App extends React.Component {
       componentDidMount(){
@@ -54,6 +55,7 @@ render() {
                         <PrivateRoute exact path="/add" component={AddTrip} />
                         <PrivateRoute exact path="/trip/:id" component={TripDetails} />
                         <PrivateRoute exact path="/history" component={History} />
+                        <PrivateRoute exact path="/pay/:id" component={Pay} />
                         <PrivateRoute exact path="/profile" component={Profile} />
                         <PrivateRoute exact path="/transit" component={Transit} />
                         </section>

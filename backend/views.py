@@ -3,8 +3,8 @@ from django.contrib.gis.measure import D
 from django.contrib.gis.measure import Distance  
 from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.gis.geos import Point 
-from .serializers import RegisterRiderSerilizer,TripSerializer,LoginSerializer,UserSerilizer,RegisterSerilizer,ReadOnlyTripSerializer
-from .models import Trip,User
+from .serializers import ReviewSerializer,RegisterRiderSerilizer,TripSerializer,LoginSerializer,UserSerilizer,RegisterSerilizer,ReadOnlyTripSerializer
+from .models import Trip,User,Payments,Review
 from rest_framework import viewsets
 from rest_framework import generics,permissions
 from rest_framework.response import Response
@@ -23,6 +23,7 @@ from .blocks.fl import load_into_db
 # from rest_framework import filters
 from django.http import HttpResponse,JsonResponse
 from django_filters import FilterSet
+from rest_framework.parsers import MultiPartParser, FormParser
 # from time import time
 import time
 from datetime import date,datetime,timedelta
@@ -142,7 +143,7 @@ class JoinTripView(generics.RetrieveUpdateAPIView):
         return Response({"updated successfully"})
 class RegisterRiderAPI(generics.GenericAPIView):
     serializer_class = RegisterRiderSerilizer
-
+    parser_classes = (MultiPartParser, FormParser)
     def post(self,request,*args,**kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -153,7 +154,7 @@ class RegisterRiderAPI(generics.GenericAPIView):
         })
 class RegisterAPI(generics.GenericAPIView):
     serializer_class = RegisterSerilizer
-
+    parser_classes = (MultiPartParser, FormParser)
     def post(self,request,*args,**kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -207,7 +208,7 @@ class GetAllTrips(generics.ListAPIView):
     ]
     def get_queryset(self):
         user = User.objects.filter(username=self.request.user).first()
-        return Trip.objects.filter(driver=user).all()
+        return Trip.objects.filter(driver=user,status="COMPLETED").all()
 class GetAllRider(generics.ListAPIView):
     serializer_class = ReadOnlyTripSerializer
     permissions_classes = [
@@ -215,7 +216,7 @@ class GetAllRider(generics.ListAPIView):
     ]
     def get_queryset(self):
         user = User.objects.filter(username=self.request.user).first()
-        return Trip.objects.filter(rider=user).all()
+        return Trip.objects.filter(rider=user,status="COMPLETED").all()
 from django.shortcuts import get_object_or_404
 class TripFilter(FilterSet):
     pick_up_address = filters.CharFilter('pick_up_address')
@@ -242,7 +243,7 @@ class TripDriver(generics.ListAPIView):
         user = User.objects.all()
         return user
     filter_backends = (DjangoFilterBackend,)
-    filter_fields = ('username',)
+    filter_fields = ('username','id')
 class TransitView(generics.ListAPIView):
     serializer_class = TripSerializer
     def get_queryset(self):
@@ -250,10 +251,10 @@ class TransitView(generics.ListAPIView):
         user = User.objects.filter(username=self.request.user).first()
         print(user)
         if user.is_rider:
-            x = Trip.objects.filter(status="REQUESTED",rider=user ).all()
+            x = Trip.objects.filter(status="IN_PROGRESS",rider=user ).all()
             return x
         else:
-            y = Trip.objects.filter(status="REQUESTED",driver=user).all()
+            y = Trip.objects.filter(status="IN_PROGRESS",driver=user).all()
             print(y)
             print("not auth")
             return y
@@ -311,9 +312,31 @@ def calls(phone_number):
 # from brownie.types import ConfigDict
 
 def payment(request):
+    print(request.data['id'])
     r = requests.get('http://127.0.0.1:5000/blockNumber')
     print(r.status_code)
     print(r.text)
-    print()
     print(r.json())
     return HttpResponse(r.json())
+class TripPay(generics.GenericAPIView):
+    def post(self,request,*args,**kwargs):
+        id = request.data['id']
+        print(id)
+        t = Trip.objects.get(id=id)
+        print(t)
+        r = requests.get('http://127.0.0.1:5000/blockNumber')
+        print(r.status_code)
+        p = r.json()['data']
+        # user = self.r
+        p = Payments.objects.create(ride=t,tx_hash=p)
+        p.save()
+        return HttpResponse(r.json())
+class ReviewAPI(generics.ListCreateAPIView):
+    serializer_class = ReviewSerializer
+    queryset = Review.objects.all()
+    # permission_classes = [
+    #     permissions.IsAuthenticated,
+    # ]
+    def perform_create(self, serializer):
+        print(self.request.user)
+        return serializer.save(user=self.request.user)

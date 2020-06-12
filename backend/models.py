@@ -5,6 +5,7 @@ from django.contrib.auth.models import AbstractUser
 from django.shortcuts import reverse
 from django.conf import settings
 from timezone_field  import TimeZoneField
+from django.db.models import Avg, Max, Min, Sum
 # Create your models here.
 class User(AbstractUser):
     tel_no = models.CharField(max_length=18,default=0)
@@ -72,3 +73,17 @@ class Trip(models.Model):
         self.price.save()
     def __str__(self):
         return self.status
+class Payments(models.Model):
+    payed_at = models.DateTimeField(auto_now_add=True)
+    ride = models.ForeignKey(Trip,on_delete=models.CASCADE,null=True,blank=True)
+    tx_hash = models.CharField(max_length=400)
+
+    def __str__(self):
+        return self.tx_hash
+class Review(models.Model):
+    courtesy = models.DecimalField(default=0,decimal_places=2,max_digits=7)
+    driver = models.ForeignKey(User,on_delete=models.CASCADE,related_name="driver_review")
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "{0} out of  {1}".format(self.courtesy,5)

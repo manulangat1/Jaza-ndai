@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'taxi.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'django_geo',
+        'NAME': 'django_geos',
         'USER': 'manulangat',
         'PASSWORD': '3050manu'
     }

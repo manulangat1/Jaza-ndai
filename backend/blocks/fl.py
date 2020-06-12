@@ -37,7 +37,17 @@ def block_number():
     # print(tx)
     t = tx.decode('ISO-8859-1')
     print(t)
-    return jsonify({'data': current_web3.eth.blockNumber,"tx":t})
+    return jsonify({'data': current_web3.eth.blockNumber})
+# export const PayView = () => dispatch => {
+#     axios.get("/api/payment")
+#          .then(res => {
+#              dispatch({
+#                  type:PAY,
+#                  payload:res.data
+#              })
+#          })
+#          .catch(err => console.log(err))
+# }
 @app.route('/call',methods=['GET','POST'])
 def call():
     twilio_client = Client(TWILIO_ACCOUNT_SID,

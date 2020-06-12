@@ -11,21 +11,28 @@ class Register extends React.Component {
             email:'',
             password:'',
             password2:'',
-            tel_no:''
+            tel_no:'',
+            pic:null
         }
       }
     onChange = e => {
         this.setState({[e.target.name]:e.target.value})
     }
+    handleImageChange = e => {
+        this.setState({
+            [e.target.name]: e.target.files[0]
+        })
+      };
     onSubmit = e => {
         e.preventDefault()
-        const {username,email,password,password2,tel_no} = this.state
+        console.log(this.state.pic)
+        const {username,email,password,password2,tel_no,pic} = this.state
         if (password !== password2  ){
             alert("Passwords Do not match")
         }
         else{
         const newUser = {
-                username,password,email,tel_no
+                username,password,email,tel_no,pic
             }
         this.props.register(newUser)
         this.setState({
@@ -41,7 +48,7 @@ class Register extends React.Component {
         if (this.props.isAuthenticated){
             return <Redirect to="/" />
         }
-        const {username,email,password,password2,tel_no} = this.state
+        const {username,email,password,password2,tel_no,pic} = this.state
         return(
             <section id="register">
             <div className="container">
@@ -67,6 +74,11 @@ class Register extends React.Component {
                     <div>
                         <label>Tel no</label>
                         <input type="tel"  placeholder="+254700000000" required className="form-control" value={tel_no} onChange={this.onChange} name="tel_no"  />
+                    </div>
+                    <div>
+                    <input type="file"
+                   id="pic"
+                    onChange={this.handleImageChange}  name="pic"/>
                     </div>
                     <button className="primary-btn">Sign Up </button>
                     <p><Link to="/login">Login</Link> | <Link to="/register/rider">Register as a rider</Link></p>

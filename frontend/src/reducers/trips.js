@@ -6,7 +6,10 @@ import { GET_ALL_TRIPS,
     SEARCH_TRIPS,
     GET_DRIVER,
     COMPLETE_TRIP,
-    GET_TRANSIT
+    GET_TRANSIT,
+    PAY,
+    PAY_TRIP,
+    RATE_DRIVER
   } from '../actions/types'
 
 const initialState = {
@@ -16,7 +19,10 @@ const initialState = {
     tripS:[],
     driver:[],
     complete:[],
-    onT:[]
+    onT:[],
+    pays:[],
+    payT:[],
+    rating:[]
 }
 export default function(state=initialState,action){
     switch(action.type){
@@ -57,10 +63,25 @@ export default function(state=initialState,action){
                 ...state,
                 driver:action.payload
             }
+        case RATE_DRIVER:
+            return {
+                ...state,
+                rating:action.payload
+            }
         case JOIN_TRIP:
             return{
                 ...state,
                 tripData:action.payload
+            }
+        case PAY:
+            return{
+                ...state,
+                pays:action.payload
+            }
+        case PAY_TRIP:
+            return{
+                ...state,
+                payT:action.payload
             }
         default:
             return state

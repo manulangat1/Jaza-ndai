@@ -11,12 +11,13 @@ class Transit extends React.Component{
         return(
             <section id="tri">
                 <div className="container">
-                    {
+                    { trips && trips.length > 0 ?
                         trips.map(trip => (
                             <div key={trip.id}>
-                                <h1> <Link to={`trip/${trip.id}`}>To: {trip.drop_off_address}</Link></h1>
+                                <h1> <Link to={`pay/${trip.id}`}>To: {trip.drop_off_address}</Link></h1>
                             </div>
                         ))
+                        : "you do not have any trip in progress"
                     }
                 </div>
             </section>

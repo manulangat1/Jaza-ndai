@@ -73,14 +73,14 @@ class All extends React.Component {
                             <Link to={`trip/${trip.id}`} onClick={this.clearState}>Book ride</Link>
                             </Popup>
                         </Marker>
-                        <Marker
+                        {/* <Marker
                         key={trip.id}
                         position={[trip.drop_lat,trip.drop_lng]}
                     >
                         </Marker>
                         <Polygon key={trip.id} positions={[
           [trip.geo_location_lat, trip.geo_location_long], [trip.drop_lat,trip.drop_lng],
-        ]} color={'red'} />
+        ]} color={'red'} /> */}
                         </div>
                     ))}
             </Map>

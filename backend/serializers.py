@@ -3,8 +3,8 @@ from django.contrib.auth import authenticate
 # from django.contrib.auth.models import User
 
 
-from .models import Trip,User
-
+from .models import Trip,User,Review
+from django.db.models import Avg, Max, Min, Sum
 # //login serializers
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
@@ -19,6 +19,7 @@ class LoginSerializer(serializers.Serializer):
 
 # register serializers
 class RegisterSerilizer(serializers.ModelSerializer):
+    pic = serializers.ImageField(default=None)
     class Meta:
         model = User
         fields = (
@@ -26,16 +27,22 @@ class RegisterSerilizer(serializers.ModelSerializer):
             'username',
             'email',
             'password',
-            'is_driver'
+            'is_driver',
+            'tel_no',
+            'pic'
         )
         extra_kwargs={'password':{'write_only':True}}
     def create(self, validated_data):
         # return super().create(validated_data)
         t = True
         user = User.objects.create_user(validated_data['username'],validated_data['email'],validated_data['password'],is_driver=t)
+        user.tel_no = validated_data['tel_no']
+        user.pic =validated_data['pic']
+        user.save()
         return user
 #register rider serializer 
 class RegisterRiderSerilizer(serializers.ModelSerializer):
+    # pic = serializers.ImageField(default=None)
     class Meta:
         model = User
         fields = (
@@ -43,13 +50,18 @@ class RegisterRiderSerilizer(serializers.ModelSerializer):
             'username',
             'email',
             'password',
-            'is_rider'
+            'is_rider',
+            'tel_no',
+            'pic'
         )
         extra_kwargs={'password':{'write_only':True}}
     def create(self, validated_data):
         # return super().create(validated_data)
         t = True
         user = User.objects.create_user(validated_data['username'],validated_data['email'],validated_data['password'],is_rider=t)
+        user.tel_no = validated_data['tel_no']
+        user.pic = validated_data['pic']
+        user.save()
         return user
 # user serializer
 class UserSerilizer(serializers.ModelSerializer):
@@ -67,8 +79,18 @@ class UserSerilizer(serializers.ModelSerializer):
 class StringSerializer(serializers.StringRelatedField):
     def to_internal_value(self,value):
         return value
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = (
+            "id",
+            "courtesy",
+            "ride"
+        )
 class TripSerializer(serializers.ModelSerializer):
-    driver = StringSerializer()
+    driver = serializers.SerializerMethodField()
+    review = serializers.SerializerMethodField()
+    # driver = UserSerializer()
     # rider = StringSerializer()
     class Meta:
         model = Trip
@@ -92,21 +114,13 @@ class TripSerializer(serializers.ModelSerializer):
             'drop_lat',
             'drop_lng',
             'take_off',
-            'take_off_date'
+            'take_off_date',
         )
         read_only_fields = ('id','created','updated',)
-    # def get_driver(self,obj):
-    #     driver_name=obj.driver
-    #     user = User.objects.get(username=driver_name)
-    #     print(user)
-    #     return UserSerilizer(obj.driver.all(),many=True).data
-        # QuestionSerializer(obj.questions.all(),many=True).data
-    # def get_rider(self,obj):
-    #     return UserSerilizer(obj.rider).data
+    def get_driver(self,obj):
+        return UserSerilizer(obj.driver).data
+    
 class ReadOnlyTripSerializer(serializers.ModelSerializer):
-    # driver = UserSerilizer(read_only=True)
-    # rider = UserSerilizer(read_only=True)
-
     class Meta:
         model = Trip
         fields = '__all__'
