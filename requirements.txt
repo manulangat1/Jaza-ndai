@@ -32,7 +32,7 @@ django-import-export==2.0.2
 django-rest-framework==0.1.0
 django-rest-knox==4.1.0
 django-timezone-field==4.0
-djangorestframework==3.11.0
+djangorestframework==3.11.2
 dramatiq==1.8.1
 ed25519==1.5
 et-xmlfile==1.0.1
