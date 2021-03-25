@@ -114,7 +114,7 @@ python-decouple==3.3
 python-interface==1.5.3
 pythx==1.5.7
 pytz==2019.3
-PyYAML==5.3
+PyYAML==5.4
 redis==3.4.1
 requests==2.23.0
 rlp==1.2.0
