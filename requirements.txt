@@ -91,7 +91,7 @@ protobuf==3.11.3
 psutil==5.7.0
 psycopg2==2.8.4
 pure-interface==4.0.0
-py==1.8.1
+py==1.10.0
 py-solc==3.2.0
 py-solc-ast==1.2.4
 py-solc-x==0.8.1
