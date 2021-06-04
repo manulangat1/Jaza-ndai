@@ -23,7 +23,7 @@ cytoolz==0.10.1
 daphne==2.4.1
 defusedxml==0.6.0
 diff-match-patch==20181111
-Django==3.0.3
+Django==3.1.9
 django-archive==0.1.6
 django-dbbackup==3.3.0
 django-dramatiq==0.9.1
