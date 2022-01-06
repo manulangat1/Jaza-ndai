@@ -10,7 +10,7 @@ Automat==0.8.0
 base58==2.0.0
 billiard==3.6.3.0
 bitarray==1.2.1
-celery==4.4.1
+celery==5.2.2
 certifi==2019.11.28
 cffi==1.13.2
 channels==2.4.0
