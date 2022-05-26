@@ -130,7 +130,7 @@ tablib==1.1.0
 toolz==0.10.0
 tqdm==4.46.0
 twilio==6.21.0
-Twisted==19.10.0
+Twisted==22.4.0
 txaio==20.1.1
 typing==3.7.4.1
 typing-extensions==3.7.4.2
