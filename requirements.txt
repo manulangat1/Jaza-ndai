@@ -74,7 +74,7 @@ more-itertools==8.2.0
 multiaddr==0.0.9
 mythx-models==1.7.5
 netaddr==0.7.19
-numpy==1.18.1
+numpy==1.22.0
 odfpy==1.4.1
 opencage==1.2
 openpyxl==3.0.3
