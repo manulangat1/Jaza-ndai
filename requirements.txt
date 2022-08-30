@@ -37,7 +37,7 @@ dramatiq==1.8.1
 ed25519==1.5
 et-xmlfile==1.0.1
 eth-abi==2.1.1
-eth-account==0.5.2
+eth-account==0.5.9
 eth-brownie==1.8.4
 eth-event==1.0.0
 eth-hash==0.2.0
